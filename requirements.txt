@@ -1,0 +1,13 @@
+# run this in terminal to install all required modules
+# pip install -r /path/to/requirements.txt
+
+# python packages required to run the dashboard
+pandas
+dash
+plotly
+dash_mantine_components
+dash_bootstrap_components
+datetime
+openpyxl
+ipykernel
+xlsxwriter
