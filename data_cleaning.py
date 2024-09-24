@@ -70,6 +70,4 @@ type_codes = {
 data['type_code'] = data['type'].map(type_codes)
 
 # Export the final data
-out_path = "dataset/cleaned_emrat.xlsx"
-writer = pd.ExcelWriter(out_path , engine='xlsxwriter')
-df.to_excel(writer, sheet_name='Sheet1')
+data.to_excel("dataset/cleaned_emrat.xlsx")
