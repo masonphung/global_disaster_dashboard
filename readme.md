@@ -10,4 +10,7 @@
 
 
 ### Last update
-2023/09/24: (Mason) Create the repo, clean dataset, requirements.txt
+2023/09/24: 
+- (Mason) 
+    - Create the repo, clean dataset, requirements.txt
+    - Clean data: 'dataset/cleaned_emrat.xlsx'
