@@ -30,8 +30,8 @@ data = data[~data['type'].isin(remove_vars)]
 data = data[~data['month'].isnull()]
 
 # Convert null values in total damage, deaths and affected to '-1'
-for i in ['total_damage', 'total_deaths', 'total_affected']:
-    data[i] = data[i].replace(np.nan, -1)
+# for i in ['total_damage', 'total_deaths', 'total_affected']:
+#    data[i] = data[i].replace(np.nan, -1)
 
 
 # Add a yyyy/mm variable
