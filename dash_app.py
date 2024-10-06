@@ -5,7 +5,7 @@ import pandas as pd
 import plotly.express as px
 
 # Load the dataset
-file_path = 'C:/Users/admin/Downloads/try_dash/cleaned_emrat.xlsx'
+file_path = 'dataset/cleaned_emrat.xlsx'
 data = pd.read_excel(file_path)
 
 # Convert the 'last_update' column to datetime
@@ -33,6 +33,35 @@ continents = sorted(data['region'].unique())
 subregions = sorted(data['subregion'].unique())
 countries = sorted(data['country'].unique())
 disaster_types = sorted(data['type'].unique())
+
+def apply_filters(data, selected_continent=None, selected_subregion=None, selected_country=None, selected_year=None, selected_month=None, selected_disaster_type=None):
+    filtered_data = data.copy()
+
+    # Apply continent filter
+    if selected_continent:
+        filtered_data = filtered_data[filtered_data['region'] == selected_continent]
+
+    # Apply subregion filter
+    if selected_subregion:
+        filtered_data = filtered_data[filtered_data['subregion'] == selected_subregion]
+
+    # Apply country filter
+    if selected_country:
+        filtered_data = filtered_data[filtered_data['country'] == selected_country]
+
+    # Apply year filter
+    if selected_year:
+        filtered_data = filtered_data[filtered_data['year'] == int(selected_year)]
+
+    # Apply month filter
+    if selected_month:
+        filtered_data = filtered_data[filtered_data['month'] == int(selected_month)]
+
+    # Apply disaster type filter
+    if selected_disaster_type:
+        filtered_data = filtered_data[filtered_data['type'] == selected_disaster_type]
+
+    return filtered_data
 
 # Create the Dash app
 app = dash.Dash(__name__)
@@ -144,8 +173,6 @@ app.layout = html.Div([
     ], style={'display': 'flex', 'flex-direction': 'row', 'padding-top': '20px'}),
 ])
 
-# Callbacks remain in original order
-
 # Callback to update the subregion dropdown based on selected continent
 @app.callback(
     Output('subregion-dropdown', 'options'),
@@ -181,31 +208,8 @@ def update_countries(selected_subregion):
      Input('disaster-type-dropdown', 'value')]
 )
 def update_stat_cards(selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type):
-    filtered_data = data
-    
-    # Apply continent filter
-    if selected_continent:
-        filtered_data = filtered_data[filtered_data['region'] == selected_continent]
-
-    # Apply subregion filter
-    if selected_subregion:
-        filtered_data = filtered_data[filtered_data['subregion'] == selected_subregion]
-
-    # Apply country filter
-    if selected_country:
-        filtered_data = filtered_data[filtered_data['country'] == selected_country]
-
-    # Apply year filter
-    if selected_year:
-        filtered_data = filtered_data[filtered_data['year'] == int(selected_year)]
-    
-    # Apply month filter
-    if selected_month:
-        filtered_data = filtered_data[filtered_data['month'] == int(selected_month)]
-
-    # Apply disaster type filter
-    if selected_disaster_type:
-        filtered_data = filtered_data[filtered_data['type'] == selected_disaster_type]
+    # Use the helper function to filter data
+    filtered_data = apply_filters(data, selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type)
 
     # Calculate totals for the filtered data
     total_deaths = filtered_data['total_deaths'].sum()
@@ -229,31 +233,8 @@ def update_stat_cards(selected_continent, selected_subregion, selected_country, 
      Input('disaster-type-dropdown', 'value')]
 )
 def update_remaining_cards(selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type):
-    filtered_data = data
-    
-    # Apply continent filter
-    if selected_continent:
-        filtered_data = filtered_data[filtered_data['region'] == selected_continent]
-
-    # Apply subregion filter
-    if selected_subregion:
-        filtered_data = filtered_data[filtered_data['subregion'] == selected_subregion]
-
-    # Apply country filter
-    if selected_country:
-        filtered_data = filtered_data[filtered_data['country'] == selected_country]
-
-    # Apply year filter
-    if selected_year:
-        filtered_data = filtered_data[filtered_data['year'] == int(selected_year)]
-
-    # Apply month filter
-    if selected_month:
-        filtered_data = filtered_data[filtered_data['month'] == int(selected_month)]
-
-    # Apply disaster type filter
-    if selected_disaster_type:
-        filtered_data = filtered_data[filtered_data['type'] == selected_disaster_type]
+    # Use the helper function to filter data
+    filtered_data = apply_filters(data, selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type)
 
     # Get country with most affected
     most_affected_country = filtered_data.groupby('country')['total_affected'].sum().idxmax() if not filtered_data.empty else 'N/A'
@@ -281,31 +262,8 @@ def update_remaining_cards(selected_continent, selected_subregion, selected_coun
      Input('disaster-type-dropdown', 'value')]
 )
 def update_damage_map(selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type):
-    filtered_data = data
-    
-    # Apply continent filter
-    if selected_continent:
-        filtered_data = filtered_data[filtered_data['region'] == selected_continent]
-    
-    # Apply subregion filter
-    if selected_subregion:
-        filtered_data = filtered_data[filtered_data['subregion'] == selected_subregion]
-    
-    # Apply country filter
-    if selected_country:
-        filtered_data = filtered_data[filtered_data['country'] == selected_country]
-    
-    # Apply year filter
-    if selected_year:
-        filtered_data = filtered_data[filtered_data['year'] == int(selected_year)]
-    
-    # Apply month filter
-    if selected_month:
-        filtered_data = filtered_data[filtered_data['month'] == int(selected_month)]
-
-    # Apply disaster type filter
-    if selected_disaster_type:
-        filtered_data = filtered_data[filtered_data['type'] == selected_disaster_type]
+    # Use the helper function to filter data
+    filtered_data = apply_filters(data, selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type)
 
     # Create choropleth map for total damage
     fig = px.choropleth(
@@ -340,31 +298,8 @@ def update_damage_map(selected_continent, selected_subregion, selected_country, 
      Input('disaster-type-dropdown', 'value')]
 )
 def update_disaster_count_map(selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type):
-    filtered_data = data
-    
-    # Apply continent filter
-    if selected_continent:
-        filtered_data = filtered_data[filtered_data['region'] == selected_continent]
-    
-    # Apply subregion filter
-    if selected_subregion:
-        filtered_data = filtered_data[filtered_data['subregion'] == selected_subregion]
-    
-    # Apply country filter
-    if selected_country:
-        filtered_data = filtered_data[filtered_data['country'] == selected_country]
-
-    # Apply year filter
-    if selected_year:
-        filtered_data = filtered_data[filtered_data['year'] == int(selected_year)]
-    
-    # Apply month filter
-    if selected_month:
-        filtered_data = filtered_data[filtered_data['month'] == int(selected_month)]
-
-    # Apply disaster type filter
-    if selected_disaster_type:
-        filtered_data = filtered_data[filtered_data['type'] == selected_disaster_type]
+    # Use the helper function to filter data
+    filtered_data = apply_filters(data, selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type)
 
     # Create choropleth map for total number of disasters
     disaster_count_filtered = filtered_data.groupby('country')['id'].count().reset_index()
@@ -402,31 +337,8 @@ def update_disaster_count_map(selected_continent, selected_subregion, selected_c
      Input('disaster-type-dropdown', 'value')]
 )
 def update_stacked_bar_chart(selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type):
-    filtered_data = data
-    
-    # Apply continent filter
-    if selected_continent:
-        filtered_data = filtered_data[filtered_data['region'] == selected_continent]
-    
-    # Apply subregion filter
-    if selected_subregion:
-        filtered_data = filtered_data[filtered_data['subregion'] == selected_subregion]
-    
-    # Apply country filter
-    if selected_country:
-        filtered_data = filtered_data[filtered_data['country'] == selected_country]
-    
-    # Apply year filter
-    if selected_year:
-        filtered_data = filtered_data[filtered_data['year'] == int(selected_year)]
-    
-    # Apply month filter
-    if selected_month:
-        filtered_data = filtered_data[filtered_data['month'] == int(selected_month)]
-
-    # Apply disaster type filter
-    if selected_disaster_type:
-        filtered_data = filtered_data[filtered_data['type'] == selected_disaster_type]
+    # Use the helper function to filter data
+    filtered_data = apply_filters(data, selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type)
 
     # Group by year and type for the filtered data
     disasters_by_type_and_year_filtered = filtered_data.groupby(['year', 'type']).size().reset_index(name='total_disasters')
@@ -454,31 +366,8 @@ def update_stacked_bar_chart(selected_continent, selected_subregion, selected_co
      Input('disaster-type-dropdown', 'value')]
 )
 def update_casualty_trend(selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type):
-    filtered_data = data
-
-    # Apply continent filter
-    if selected_continent:
-        filtered_data = filtered_data[filtered_data['region'] == selected_continent]
-
-    # Apply subregion filter
-    if selected_subregion:
-        filtered_data = filtered_data[filtered_data['subregion'] == selected_subregion]
-
-    # Apply country filter
-    if selected_country:
-        filtered_data = filtered_data[filtered_data['country'] == selected_country]
-
-    # Apply year filter
-    if selected_year:
-        filtered_data = filtered_data[filtered_data['year'] == int(selected_year)]
-
-    # Apply month filter
-    if selected_month:
-        filtered_data = filtered_data[filtered_data['month'] == int(selected_month)]
-
-    # Apply disaster type filter
-    if selected_disaster_type:
-        filtered_data = filtered_data[filtered_data['type'] == selected_disaster_type]
+    # Use the helper function to filter data
+    filtered_data = apply_filters(data, selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type)
 
     # Group by year and calculate total deaths
     deaths_by_year = filtered_data.groupby('year')['total_deaths'].sum().reset_index()
