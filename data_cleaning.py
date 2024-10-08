@@ -3,12 +3,38 @@ import pandas as pd
 import numpy as np
 import datetime
 
-# Load raw data
-df = pd.read_excel('dataset/raw_data/public_emdat_20240923.xlsx')
+def load_data(file_path, max_attempts=3):
+    attempts = 0
+    while attempts < max_attempts:
+        try:
+            # Try to load the data
+            df = pd.read_excel(file_path)
+            return df  # If successful, return the DataFrame
+        except FileNotFoundError:
+            # If file is not found, increment the attempt counter
+            attempts += 1
+            print(f"File not found: {file_path} (Attempt {attempts} of {max_attempts})")
+            
+            # If max attempts reached, exit the loop
+            if attempts == max_attempts:
+                print("Maximum attempts reached. Exiting...")
+                return None
+            
+            # Prompt user for a new path
+            file_path = input("Please enter the correct file path: ")
 
-# Choose desired variables
+# The original file path
+file_path = 'dataset/backups/raw_data/public_emdat_20240923.xlsx'
+df = load_data(file_path)
+
+if df is not None:
+    print("File loaded successfully.")
+else:
+    print("Failed to load the file after 3 attempts, make sure you are choosing the relative file path.")
+
+# Choose desired variables and make a copy to avoid the warning
 data = df[["DisNo.", "Disaster Type", "ISO", "Country", "Subregion", "Region", "Start Year", "Start Month", 
-             "Total Deaths", "Total Affected", "Total Damage, Adjusted ('000 US$)", "Last Update"]]
+             "Total Deaths", "Total Affected", "Total Damage, Adjusted ('000 US$)", "Last Update"]].copy()
 
 # Rename the columns
 data.rename(
@@ -21,7 +47,6 @@ data.rename(
     inplace = True
 )
 
-
 # Drop non-natural disaster and disasters that only have 1 (not enough) observations
 remove_vars = ['Animal incident', 'Epidemic', 'Impact', 'Infestation']
 data = data[~data['type'].isin(remove_vars)]
@@ -32,7 +57,6 @@ data = data[~data['month'].isnull()]
 # Convert null values in total damage, deaths and affected to '-1'
 # for i in ['total_damage', 'total_deaths', 'total_affected']:
 #    data[i] = data[i].replace(np.nan, -1)
-
 
 # Add a yyyy/mm variable
 data['date'] = data.apply(lambda row: f"{int(row['year'])}/{int(row['month']):02d}", axis=1)
@@ -71,3 +95,5 @@ data['type_code'] = data['type'].map(type_codes)
 
 # Export the final data
 data.to_excel("dataset/cleaned_emrat.xlsx")
+
+print("Data cleaned and saved successfully!")

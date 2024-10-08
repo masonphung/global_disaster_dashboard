@@ -11,3 +11,5 @@ datetime
 openpyxl
 ipykernel
 xlsxwriter
+webbrowser
+threading
