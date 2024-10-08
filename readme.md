@@ -4,9 +4,9 @@
 
 ### Members
 - Do Nam Phong, Phung | Mason
-- Cao Thuc, Ta
-- Viet Anh, Nguyen
-- Anh Duc, Nguyen
+- Cao Thuc, Ta | Erik
+- Viet Anh, Nguyen | 
+- Anh Duc, Nguyen | 
 
 
 ### Last update
