@@ -22,3 +22,6 @@
     - Fix bugs and improve plotly charts visualization
     - Enhance `dash_app.py` documentation, make in-depth comments and explanations
     - Deploy basic .css bootstrap theme customization
+
+* 2023/10/11: (Mason)
+    - Update dynamic header
