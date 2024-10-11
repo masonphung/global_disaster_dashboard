@@ -1,10 +1,12 @@
 # The file includes function(s) that help to run the dash app.
 # They help manipulate data and reduce repeating codes.
-
+import dash_bootstrap_components as dbc
+from dash import dcc, html
 
 ## A function that helps to filter data when plotting
 def apply_filters(data, selected_continent=None, selected_subregion=None, 
-                  selected_country=None, selected_year=None, selected_month=None, selected_disaster_type=None):
+                  selected_country=None, selected_year=None, selected_month=None, 
+                  selected_disaster_type=None):
     """
     Apply a series of filters to the disaster data based on user-selected criteria.
 
@@ -26,23 +28,103 @@ def apply_filters(data, selected_continent=None, selected_subregion=None,
     # Apply continent filter
     if selected_continent:
         filtered_data = filtered_data[filtered_data['region'] == selected_continent]
+    
     # Apply subregion filter
     if selected_subregion:
         filtered_data = filtered_data[filtered_data['subregion'] == selected_subregion]
+    
     # Apply country filter
     if selected_country:
         filtered_data = filtered_data[filtered_data['country'] == selected_country]
+    
     # Apply year filter
     if selected_year:
         filtered_data = filtered_data[
-            (filtered_data['year'] >= str(selected_year[0]))
-            &
+            (filtered_data['year'] >= str(selected_year[0])) &
             (filtered_data['year'] <= str(selected_year[1]))
         ]
+    
     # Apply month filter
     if selected_month:
         filtered_data = filtered_data[filtered_data['month'] == int(selected_month)]
+    
     # Apply disaster type filter
     if selected_disaster_type:  # Ensure this is not None or empty
         filtered_data = filtered_data[filtered_data['type'].isin(selected_disaster_type)]
+
     return filtered_data
+
+
+def generate_header(header_text, selected_disasters, selected_year, selected_month):
+    """
+    Generate a dynamic header string based on selected disasters, years, and months.
+
+    Parameters:
+    - base_header_text (str): The base text for the header.
+    - selected_disasters (list): A list of selected disaster types.
+    - selected_year (int or list): The selected year or a range of years as a list.
+    - selected_month (int): The selected month as a number (1-12).
+
+    Returns:
+        str: A formatted header string reflecting the selections appended to the base text.
+    """
+
+    # Disaster names logic
+    if len(selected_disasters) == 1:
+        header_text += f"{selected_disasters[0]}"
+    elif len(selected_disasters) == 2:
+        header_text += f"{selected_disasters[0]} and {selected_disasters[1]}"
+    else:
+        header_text += "disasters"
+
+    # Year or range of years logic
+    if isinstance(selected_year, list):  # If it's a year range
+        if selected_year[0] != selected_year[1]:
+            header_text += f" from {selected_year[0]} to {selected_year[1]}"
+        else:
+            header_text += f" in {selected_year[0]}"
+    elif selected_year is not None:
+        header_text += f" in {selected_year}"
+    
+    # Month logic
+    month_map = {
+        1: "January",
+        2: "February",
+        3: "March",
+        4: "April",
+        5: "May",
+        6: "June",
+        7: "July",
+        8: "August",
+        9: "September",
+        10: "October",
+        11: "November",
+        12: "December"
+    }
+    if selected_month:
+        header_text += f" in {month_map[selected_month]}"
+
+    return header_text
+
+
+def create_plot_card(plot_id, header_id):
+    """
+    Create a Dash Card component for displaying a plot with a dynamic header.
+
+    Parameters:
+    - plot_id (str): The ID of the plot component.
+    - selected_disasters (list): A list of selected disaster types.
+    - selected_year (int or list): The selected year or a range of years as a list.
+    - selected_month (int): The selected month as a number (1-12).
+
+    Returns:
+        dbc.Card: A Dash Bootstrap Card component containing the plot and dynamic header.
+    """
+    return dbc.Card([
+        dbc.CardHeader(id=header_id),  # Dynamic header
+        dbc.CardBody(
+            html.Div(
+                dcc.Graph(id=plot_id, style={'height': '500px'})
+            )
+        )
+    ])

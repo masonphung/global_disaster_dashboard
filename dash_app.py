@@ -9,7 +9,7 @@ import plotly.express as px
 import webbrowser
 from threading import Timer
 # Load pre-defined functions that help our work
-from utils import apply_filters
+from utils import *
 
 # Load the dataset
 file_path = 'dataset/cleaned_emrat.xlsx'
@@ -96,7 +96,19 @@ app.layout = html.Div([
                         html.Label('Month'),
                         dcc.Dropdown(
                             id='month-dropdown',
-                            options=[{'label': str(m), 'value': str(m)} for m in months],
+                            options=[
+                                {'label': 'January', 'value': 1},
+                                {'label': 'February', 'value': 2},
+                                {'label': 'March', 'value': 3},
+                                {'label': 'April', 'value': 4},
+                                {'label': 'May', 'value': 5},
+                                {'label': 'June', 'value': 6},
+                                {'label': 'July', 'value': 7},
+                                {'label': 'August', 'value': 8},
+                                {'label': 'September', 'value': 9},
+                                {'label': 'October', 'value': 10},
+                                {'label': 'November', 'value': 11},
+                                {'label': 'December', 'value': 12}],
                             placeholder='Select Month'
                         )
                     ]),
@@ -219,8 +231,10 @@ app.layout = html.Div([
                         style={'textAlign': 'center'}
                     ),
                     dbc.CardBody(
-                        html.H3(id='total-deaths-card'),
-                        style={'textAlign': 'center', 'alignItems': 'center'}
+                        html.Div([
+                            html.H3(id='total-deaths-card', style={'textAlign': 'center', 'alignItems': 'center'}),  # Output value
+                            html.P("deaths", style={'textAlign': 'center', 'marginTop': '10px'})  # Text below the output
+                        ])
                     )
                 ],className=["h-25"]),
                 # Card 2: Total Affected
@@ -230,47 +244,29 @@ app.layout = html.Div([
                         style={'textAlign': 'center'}
                     ),
                     dbc.CardBody(
-                        html.H3(id='total-affected-card'),
-                        style={'textAlign': 'center', 'alignItems': 'center'}
+                        html.Div([
+                            html.H3(id='total-affected-card', style={'textAlign': 'center', 'alignItems': 'center'}),  # Output value
+                            html.P("people", style={'textAlign': 'center', 'marginTop': '10px'})  # Text below the output
+                        ])
                     )
                 ],className=["h-25"]),
                 # Card 3: Total Damage
                 dbc.Card([
                     dbc.CardHeader(
-                        'Total Damage in USD', 
+                        'Total Damage', 
                         style={'textAlign': 'center'}
                     ),
                     dbc.CardBody(
-                        html.H3(id='total-damage-card'),
-                        style={'textAlign': 'center', 'alignItems': 'center'}
+                        html.Div([
+                            html.H3(id='total-damage-card', style={'textAlign': 'center', 'alignItems': 'center'}),  # Output value
+                            html.P("US$", style={'textAlign': 'center', 'marginTop': '10px'})  # Text below the output
+                        ])
                     )
                 ],className=["h-25"]),
-                # Card 4: Most affected country
+                # Card 4: Country with most deaths
                 dbc.Card([
                     dbc.CardHeader(
-                        'Most Affected Country', 
-                        style={'textAlign': 'center'}
-                    ),
-                    dbc.CardBody(
-                        html.H3(id='most-affected-country-card'),
-                        style={'textAlign': 'center', 'alignItems': 'center'}
-                    )
-                ],className=["h-25"]),
-                # Card 5: Most damaged country
-                dbc.Card([
-                    dbc.CardHeader(
-                        'Most Damaged Country', 
-                        style={'textAlign': 'center'}
-                    ),
-                    dbc.CardBody(
-                        html.H3(id='most-damaged-country-card'),
-                        style={'textAlign': 'center', 'alignItems': 'center'}
-                    )
-                ],className=["h-25"]),
-                # Card 6: Country with most deaths
-                dbc.Card([
-                    dbc.CardHeader(
-                        'Country with Highest Casualty', 
+                        'Country with the Highest Casualty', 
                         style={'textAlign': 'center'}
                     ),
                     dbc.CardBody(
@@ -278,10 +274,32 @@ app.layout = html.Div([
                         style={'textAlign': 'center', 'alignItems': 'center'}
                     )
                 ],className=["h-25"]),
+                # Card 5: Most affected country
+                dbc.Card([
+                    dbc.CardHeader(
+                        'Country with the Most People Affected', 
+                        style={'textAlign': 'center'}
+                    ),
+                    dbc.CardBody(
+                        html.H3(id='most-affected-country-card'),
+                        style={'textAlign': 'center', 'alignItems': 'center'}
+                    )
+                ],className=["h-25"]),
+                # Card 6: Most damaged country
+                dbc.Card([
+                    dbc.CardHeader(
+                        'Country with the Highest Damage', 
+                        style={'textAlign': 'center'}
+                    ),
+                    dbc.CardBody(
+                        html.H3(id='most-damaged-country-card'),
+                        style={'textAlign': 'center', 'alignItems': 'center'}
+                    )
+                ],className=["h-25"]),
                 # Card 7: Data last updated date
                 dbc.Card([
                     dbc.CardHeader(
-                        'Last Updated', 
+                        'Data Last Update', 
                         style={'textAlign': 'center'}
                     ),
                     dbc.CardBody(
@@ -300,53 +318,21 @@ app.layout = html.Div([
         # Col 2: Map and chart A
         dbc.Col(
             [
-                # Map-A
-                dbc.Card([
-                    dbc.CardHeader('Total Damage by Country'),
-                    dbc.CardBody(
-                        html.Div(
-                            dcc.Graph(id='damage-map', style={'height': '500px'})
-                        )
-                    )
-                ]),
-                # Chart-A
-                dbc.Card([
-                    dbc.CardHeader('Total number of disaster by year and type'),
-                    dbc.CardBody(
-                        html.Div(
-                            dcc.Graph(id='stacked-bar-chart', style={'height': '500px'})
-                        )
-                    )
-                ]),
+                create_plot_card('damage-map', 'damage-map-header'),
+                create_plot_card('disaster-count-map', 'disaster-count-map-header')
             ], xs=12, sm=12, md=12, lg=5, xl=5
         ),
         # Col 3: Map and chart B
         dbc.Col(
             [
-                # Map-B
-                dbc.Card([
-                    dbc.CardHeader('Total amount of disaster'),
-                    dbc.CardBody(
-                        html.Div(
-                            dcc.Graph(id='disaster-count-map', style={'height': '500px'})
-                        )
-                    )
-                ]),
-                # Chart-B
-                dbc.Card([
-                    dbc.CardHeader('Casualty trends by year'),
-                    dbc.CardBody(
-                        html.Div(
-                            dcc.Graph(id='casualty-trend', style={'height': '500px'})
-                        )
-                    )
-                ])   
+                create_plot_card('stacked-bar-chart', 'stacked-bar-chart-header'),
+                create_plot_card('casualty-trend', 'casualty-trend-header')
             ], xs=12, sm=12, md=12, lg=5, xl=5
         ),
     ],style={'display': 'flex', 'flexDirection': 'row', 'margin': '5px'}),
 ])
 
-# Filter A: Update the subregion dropdown based on selected continent
+# Filter B1: Update the subregion dropdown based on selected continent
 @app.callback(
     Output('subregion-dropdown', 'options'),
     Input('continent-dropdown', 'value')
@@ -357,7 +343,7 @@ def update_subregions(selected_continent):
         return [{'label': s, 'value': s} for s in filtered_subregions]
     return []
 
-# Filter B: Update the country dropdown based on selected subregion
+# Filter B2: Update the country dropdown based on selected subregion
 @app.callback(
     Output('country-dropdown', 'options'),
     Input('subregion-dropdown', 'value')
@@ -368,11 +354,16 @@ def update_countries(selected_subregion):
         return [{'label': c, 'value': c} for c in filtered_countries]
     return []
 
-# Stats-A: Total deaths, total affected, and total damage cards
+
+# Stats: Update all the statistics cards
 @app.callback(
     [Output('total-deaths-card', 'children'),
      Output('total-affected-card', 'children'),
-     Output('total-damage-card', 'children')],
+     Output('total-damage-card', 'children'),
+     Output('most-deaths-country-card', 'children'),
+     Output('most-affected-country-card', 'children'),
+     Output('most-damaged-country-card', 'children'),
+     Output('last-updated-card', 'children')],
     [Input('continent-dropdown', 'value'),
      Input('subregion-dropdown', 'value'),
      Input('country-dropdown', 'value'),
@@ -389,26 +380,6 @@ def update_stat_cards(selected_continent, selected_subregion, selected_country, 
     total_affected = filtered_data['total_affected'].sum().astype(int)
     total_damage = filtered_data['total_damage'].sum().astype(int)
 
-    # Format the values with commas for better readability
-    return (f"{total_deaths:,}", f"{total_affected:,}", f"{total_damage:,}")
-
-# Stats-B: Most Affected, Most Damaged, Country with Most Deaths, Last Updated
-@app.callback(
-    [Output('most-affected-country-card', 'children'),
-     Output('most-damaged-country-card', 'children'),
-     Output('most-deaths-country-card', 'children'),
-     Output('last-updated-card', 'children')],
-    [Input('continent-dropdown', 'value'),
-     Input('subregion-dropdown', 'value'),
-     Input('country-dropdown', 'value'),
-     Input('year-slider', 'value'),
-     Input('month-dropdown', 'value'),
-     Input('disaster-type-checkbox', 'value')]
-)
-def update_remaining_cards(selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type):
-    # Use the helper function to filter data
-    filtered_data = apply_filters(data, selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type)
-
     # Get country with most affected
     most_affected_country = filtered_data.groupby('country')['total_affected'].sum().idxmax() if not filtered_data.empty else 'N/A'
     
@@ -421,12 +392,14 @@ def update_remaining_cards(selected_continent, selected_subregion, selected_coun
     # Get last updated date
     last_updated = filtered_data['last_update'].max() if not filtered_data.empty else 'N/A'
 
-    # Return values for the cards
-    return (most_affected_country, most_damaged_country, most_deaths_country, last_updated.strftime('%Y-%m-%d') if last_updated != 'N/A' else last_updated)
+    # Format the values with commas for better readability
+    return (f"{total_deaths:,}", f"{total_affected:,}", f"{total_damage:,}",
+            most_deaths_country, most_affected_country, most_damaged_country, last_updated.strftime('%Y-%m-%d') if last_updated != 'N/A' else last_updated)
 
 # Map-A: Total damage choropleth map based on filters
 @app.callback(
-    Output('damage-map', 'figure'),
+    [Output('damage-map', 'figure'),
+     Output('damage-map-header', 'children')],
     [Input('continent-dropdown', 'value'),
      Input('subregion-dropdown', 'value'),
      Input('country-dropdown', 'value'),
@@ -435,12 +408,16 @@ def update_remaining_cards(selected_continent, selected_subregion, selected_coun
      Input('disaster-type-checkbox', 'value')]
 )
 def plot_map_damage_heat(selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type):
+    # Update the plot card header name
+    base_header = "The total damage caused by "
+    card_header_text = generate_header(base_header, selected_disaster_type, selected_year, selected_month)
+    
     # Use the helper function to filter data
     filtered_data = apply_filters(data, selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type)
 
     # Create choropleth map for total damage
     fig = px.choropleth(
-        data_frame=filtered_data,
+        filtered_data,
         locations='country',
         locationmode='country names',
         color='total_damage',
@@ -465,11 +442,12 @@ def plot_map_damage_heat(selected_continent, selected_subregion, selected_countr
             x=1
         )
     )
-    return fig
+    return fig, card_header_text
 
 # Map-B: The disaster count choropleth map based on filters
 @app.callback(
-    Output('disaster-count-map', 'figure'),
+    [Output('disaster-count-map', 'figure'),
+    Output('disaster-count-map-header', 'children')],
     [Input('continent-dropdown', 'value'),
      Input('subregion-dropdown', 'value'),
      Input('country-dropdown', 'value'),
@@ -477,7 +455,11 @@ def plot_map_damage_heat(selected_continent, selected_subregion, selected_countr
      Input('month-dropdown', 'value'),
      Input('disaster-type-checkbox', 'value')]
 )
-def plot_map_disaster_heat(selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type):
+def plot_map_disaster_count_heat(selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type):
+    # Update the plot card header name
+    base_header = "Total number of "
+    card_header_text = generate_header(base_header, selected_disaster_type, selected_year, selected_month)
+    
     # Use the helper function to filter data
     filtered_data = apply_filters(data, selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type)
 
@@ -485,11 +467,13 @@ def plot_map_disaster_heat(selected_continent, selected_subregion, selected_coun
     disaster_count_filtered = filtered_data.groupby('country')['id'].count().reset_index()
     disaster_count_filtered.columns = ['country', 'total_disasters']
 
-    fig = px.choropleth(
-        data_frame=disaster_count_filtered,
+    fig = px.scatter_geo(
+        disaster_count_filtered,
         locations='country',
         locationmode='country names',
         color='total_disasters',
+        size = 'total_disasters',
+        opacity = 0.6,
         hover_name='country',
         color_continuous_scale='Reds',
         labels={'total_disasters': 'Total Number of Disasters'}
@@ -510,11 +494,12 @@ def plot_map_disaster_heat(selected_continent, selected_subregion, selected_coun
             x=0.01
         )
     )
-    return fig
+    return fig, card_header_text
 
 # Chart-A: The stacked bar chart based on filters
 @app.callback(
-    Output('stacked-bar-chart', 'figure'),
+    [Output('stacked-bar-chart', 'figure'),
+    Output('stacked-bar-chart-header', 'children')],
     [Input('continent-dropdown', 'value'),
      Input('subregion-dropdown', 'value'),
      Input('country-dropdown', 'value'),
@@ -523,6 +508,10 @@ def plot_map_disaster_heat(selected_continent, selected_subregion, selected_coun
      Input('disaster-type-checkbox', 'value')]
 )
 def plot_bar_total_disaster(selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type):
+    # Update the plot card header name
+    base_header = "Trends of "
+    card_header_text = generate_header(base_header, selected_disaster_type, selected_year, selected_month)
+    
     # Use the helper function to filter data
     filtered_data = apply_filters(data, selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type)
 
@@ -534,8 +523,8 @@ def plot_bar_total_disaster(selected_continent, selected_subregion, selected_cou
     
     # Map the colors based on the disaster type
     disaster_colors = {
-        'Drought': 'gold', 'Earthquake': 'gray', 'Extreme temperature': 'red', 'Flood': 'blue',
-        'Mass movement': 'green', 'Storm': 'lightblue', 'Volcanic activity': 'purple', 'Wildfire': 'cyan'}
+        'Drought': 'gold', 'Extreme temperature': 'red', 'Volcanic activity': 'brown', 'Wildfire': 'orange', 
+        'Earthquake': 'gray', 'Mass movement': 'green', 'Flood': 'blue', 'Storm': 'lightblue'}
     
     # Create stacked bar chart for total disasters by type and year
     fig = px.bar(
@@ -562,11 +551,12 @@ def plot_bar_total_disaster(selected_continent, selected_subregion, selected_cou
             x=1
         )
     )
-    return fig
+    return fig, card_header_text
 
 # Chart-B: Total death by year
 @app.callback(
-    Output('casualty-trend', 'figure'),
+    [Output('casualty-trend', 'figure'),
+    Output('casualty-trend-header', 'children')],
     [Input('continent-dropdown', 'value'),
      Input('subregion-dropdown', 'value'),
      Input('country-dropdown', 'value'),
@@ -575,6 +565,10 @@ def plot_bar_total_disaster(selected_continent, selected_subregion, selected_cou
      Input('disaster-type-checkbox', 'value')]
 )
 def plot_line_casualty_trend(selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type):
+    # Update the plot card header name
+    base_header = "Casualty caused by "
+    card_header_text = generate_header(base_header, selected_disaster_type, selected_year, selected_month)
+    
     # Use the helper function to filter data
     filtered_data = apply_filters(data, selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type)
 
@@ -611,9 +605,10 @@ def plot_line_casualty_trend(selected_continent, selected_subregion, selected_co
         )
     )
 
-    return fig
+    return fig, card_header_text
 
 # Run the app
+# Unhash below to make it automatically open the dashboard in browser when running py app.
 # def open_browser():
     # webbrowser.open_new("http://127.0.0.1:8050/")
 
