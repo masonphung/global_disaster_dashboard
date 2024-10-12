@@ -60,7 +60,7 @@ min_year = min(years)
 app = dash.Dash(
     __name__, 
     external_stylesheets=[dbc.themes.BOOTSTRAP],
-    meta_tags=[{'name': 'viewport', 'content': 'width=device-width, initial-scale=1'}]
+    meta_tags=[{'name': 'viewport', 'content': 'width=device-width, initial-scale=1.0, maximum-scale=1.2, minimum-scale=0.5'}]
 )
 server = app.server
 
@@ -74,6 +74,7 @@ app.layout = html.Div([
         # Col 1: Dashboard title
         dbc.Col(
             [html.H1('Global Disaster Statistics')],
+            className = ['col', 'dflex'],
             xs=12, sm=12, md=12, lg=2, xl=2
         ),
         # Col 2: Filters
@@ -114,9 +115,11 @@ app.layout = html.Div([
                                 {'label': 'November', 'value': 11},
                                 {'label': 'December', 'value': 12}],
                             placeholder='Select Month'
-                        )
+                        ),
+                        dbc.Button("Reset Filter", id="clear-filter", style={'padding-top': 10})
                     ]),
-                ], style = {'width': '40%'}),
+                ], className = ['vw-40'], 
+                xs=12, sm=12, md=12, lg=4, xl=4),
                 # Filter 2: Location (Continent, Subregion, Country in vertical stack)
                 dbc.Col([
                     html.Div([
@@ -137,7 +140,8 @@ app.layout = html.Div([
                             placeholder='Select Country'
                         )
                         ]),  
-                ], style = {'width': '40%'}),
+                ], className = ['vw-40'], 
+                xs=12, sm=12, md=12, lg=3, xl=4),
                 # Filter 3: Disaster Type
                 dbc.Col([
                     html.Div([
@@ -148,7 +152,7 @@ app.layout = html.Div([
                                 {
                                     "label": [
                                         html.Img(src="/assets/images/disaster_types/drought.jpg", 
-                                                 style={'width': '50px', 'height': '35px', 'objectFit': 'cover', 'padding-left': 10}),
+                                                 style={'width': '60px', 'height': '35px', 'objectFit': 'cover', 'padding-left': 10}),
                                         html.Span("Drought", style={"padding-left": 10}),
                                     ],
                                     "value": "Drought",
@@ -156,7 +160,7 @@ app.layout = html.Div([
                                 {
                                     "label": [
                                         html.Img(src="/assets/images/disaster_types/earthquake.jpg", 
-                                                 style={'width': '50px', 'height': '35px', 'objectFit': 'cover', 'padding-left': 10}),
+                                                 style={'width': '60px', 'height': '35px', 'objectFit': 'cover', 'padding-left': 10}),
                                         html.Span("Earthquake", style={"padding-left": 10}),
                                     ],
                                     "value": "Earthquake",
@@ -164,15 +168,15 @@ app.layout = html.Div([
                                 {
                                     "label": [
                                         html.Img(src="/assets/images/disaster_types/extreme_temp.jpg", 
-                                                 style={'width': '50px', 'height': '35px', 'objectFit': 'cover', 'padding-left': 10}),
-                                        html.Span("Extreme temperature", style={"padding-left": 10}),
+                                                 style={'width': '60px', 'height': '35px', 'objectFit': 'cover', 'padding-left': 10}),
+                                        html.Span("Extreme temp", style={"padding-left": 10}),
                                     ],
                                     "value": "Extreme temperature",
                                 },
                                 {
                                     "label": [
                                         html.Img(src="/assets/images/disaster_types/flood.jpg", 
-                                                 style={'width': '50px', 'height': '35px', 'objectFit': 'cover', 'padding-left': 10}),
+                                                 style={'width': '60px', 'height': '35px', 'objectFit': 'cover', 'padding-left': 10}),
                                         html.Span("Flood", style={"padding-left": 10}),
                                     ],
                                     "value": "Flood",
@@ -180,7 +184,7 @@ app.layout = html.Div([
                                 {
                                     "label": [
                                         html.Img(src="/assets/images/disaster_types/mass_movement.jpg", 
-                                                 style={'width': '50px', 'height': '35px', 'objectFit': 'cover', 'padding-left': 10}),
+                                                 style={'width': '60px', 'height': '35px', 'objectFit': 'cover', 'padding-left': 10}),
                                         html.Span("Mass movement", style={"padding-left": 10}),
                                     ],
                                     "value": "Mass movement",
@@ -188,7 +192,7 @@ app.layout = html.Div([
                                 {
                                     "label": [
                                         html.Img(src="/assets/images/disaster_types/storm.jpeg",
-                                                 style={'width': '50px', 'height': '35px', 'objectFit': 'cover', 'padding-left': 10}),
+                                                 style={'width': '60px', 'height': '35px', 'objectFit': 'cover', 'padding-left': 10}),
                                         html.Span("Storm", style={"padding-left": 10}),
                                     ],
                                     "value": "Storm",
@@ -196,7 +200,7 @@ app.layout = html.Div([
                                 {
                                     "label": [
                                         html.Img(src="/assets/images/disaster_types/volcanic.jpg", 
-                                                 style={'width': '50px', 'height': '35px', 'objectFit': 'cover', 'padding-left': 10}),
+                                                 style={'width': '60px', 'height': '35px', 'objectFit': 'cover', 'padding-left': 10}),
                                         html.Span("Volcanic activity", style={"padding-left": 10}),
                                     ],
                                     "value": "Volcanic activity",
@@ -204,7 +208,7 @@ app.layout = html.Div([
                                 {
                                     "label": [
                                         html.Img(src="/assets/images/disaster_types/wildfire.jpg",
-                                                 style={'width': '50px', 'height': '35px', 'objectFit': 'cover', 'padding-left': 10}),
+                                                 style={'width': '60px', 'height': '35px', 'objectFit': 'cover', 'padding-left': 10}),
                                         html.Span("Wildfire", style={"padding-left": 10}),
                                     ],
                                     "value": "Wildfire",
@@ -215,13 +219,16 @@ app.layout = html.Div([
                             style={
                                 'display': 'flex', 'flexDirection': 'row', 
                                 'flexWrap': 'wrap', 'display':'grid',
-                                'gridTemplateColumns': 'repeat(2, 1fr)', 'gap': '10px'}
+                                'gridTemplateColumns': 'repeat(2, 1fr)', 'gap': '5px'}
                         )
                     ])
-                ], style = {'width': '20%'})
-            ])])],xs=12, sm=12, md=12, lg=10, xl=10
+                ], className = ['vw-20'], 
+                xs=12, sm=12, md=12, lg=5, xl=4)
+            ])],style = {'padding-bottom': '1vh'})], 
+            className = ['col', 'dflex'], 
+            xs=12, sm=12, md=12, lg=10, xl=10
         )
-    ],style={'display': 'flex', 'flexDirection': 'row', 'margin': '5px'}),
+    ], className=['row', 'vh-25']),
     
     # Row 2: Statistics cards and graphs                
     dbc.Row([
@@ -240,7 +247,7 @@ app.layout = html.Div([
                             html.P("deaths", style={'textAlign': 'center', 'marginTop': '10px'})  # Text below the output
                         ])
                     )
-                ],className=["h-25"]),
+                ],className=['card']),
                 # Card 2: Total Affected
                 dbc.Card([
                     dbc.CardHeader(
@@ -253,7 +260,7 @@ app.layout = html.Div([
                             html.P("people", style={'textAlign': 'center', 'marginTop': '10px'})  # Text below the output
                         ])
                     )
-                ],className=["h-25"]),
+                ],className=['card']),
                 # Card 3: Total Damage
                 dbc.Card([
                     dbc.CardHeader(
@@ -266,7 +273,7 @@ app.layout = html.Div([
                             html.P("US$", style={'textAlign': 'center', 'marginTop': '10px'})  # Text below the output
                         ])
                     )
-                ],className=["h-25"]),
+                ],className=['card']),
                 # Card 4: Country with most deaths
                 dbc.Card([
                     dbc.CardHeader(
@@ -277,7 +284,7 @@ app.layout = html.Div([
                         html.H3(id='most-deaths-country-card'),
                         style={'textAlign': 'center', 'alignItems': 'center'}
                     )
-                ],className=["h-25"]),
+                ],className=['card']),
                 # Card 5: Most affected country
                 dbc.Card([
                     dbc.CardHeader(
@@ -288,7 +295,7 @@ app.layout = html.Div([
                         html.H3(id='most-affected-country-card'),
                         style={'textAlign': 'center', 'alignItems': 'center'}
                     )
-                ],className=["h-25"]),
+                ],className=['card']),
                 # Card 6: Most damaged country
                 dbc.Card([
                     dbc.CardHeader(
@@ -299,7 +306,7 @@ app.layout = html.Div([
                         html.H3(id='most-damaged-country-card'),
                         style={'textAlign': 'center', 'alignItems': 'center'}
                     )
-                ],className=["h-25"]),
+                ],className=['card']),
                 # Card 7: Data last updated date
                 dbc.Card([
                     dbc.CardHeader(
@@ -308,31 +315,46 @@ app.layout = html.Div([
                     ),
                     dbc.CardBody(
                         html.H3(id='last-updated-card', children=last_updated.strftime('%Y-%m-%d')),
-                        style={'textAlign': 'center', 'alignItems': 'center'}
+                        className = ['card-body']
                     )
-                ],className=["h-25"]),
+                ],className=['card']),
             ],
-            className = [
+            className=[
+                'col',
                 'd-flex',
                 'justify-content-between',
                 'flex-column'
             ],
-            xs=12, sm=12, md=2, lg=2, xl=2),
+            xs=12, sm=12, md=12, lg=12, xl=2),
         # Col 2: Map and chart A
         dbc.Col(
             [
                 create_plot_card('damage-map', 'damage-map-header'),
                 create_plot_card('disaster-count-map', 'disaster-count-map-header')
-            ], xs=12, sm=12, md=12, lg=5, xl=5
+            ], 
+            className=[
+                'col',
+                'd-flex',
+                'justify-content-between',
+                'flex-column'
+            ],  
+            xs=12, sm=12, md=12, lg=12, xl=5
         ),
         # Col 3: Map and chart B
         dbc.Col(
             [
                 create_plot_card('stacked-bar-chart', 'stacked-bar-chart-header'),
                 create_plot_card('casualty-trend', 'casualty-trend-header')
-            ], xs=12, sm=12, md=12, lg=5, xl=5
+            ], 
+            className=[
+                'col',
+                'd-flex',
+                'justify-content-between',
+                'flex-column'
+            ],  
+            xs=12, sm=12, md=12, lg=12, xl=5
         ),
-    ],style={'display': 'flex', 'flexDirection': 'row', 'margin': '5px'}),
+    ], className = ['row', 'vh-75']),
 ])
 
 # Filter B1: Update the subregion dropdown based on selected continent
@@ -356,6 +378,28 @@ def update_countries(selected_subregion):
         filtered_countries = data[data['subregion'] == selected_subregion]['country'].unique()
         return [{'label': c, 'value': c} for c in filtered_countries]
     return []
+
+# Reset filter button
+@app.callback(
+    [Output('continent-dropdown', 'value'),
+    Output('subregion-dropdown', 'value'),
+    Output('country-dropdown', 'value'),
+    Output('year-slider', 'value'),
+    Output('month-dropdown', 'value'),
+    Output('disaster-type-checkbox', 'value')],
+    [Input("clear-filter", "n_clicks")],
+    prevent_initial_call=True
+)
+def reset_filters(n_clicks):
+    return (
+        None,  # Reset continent dropdown to None or default value
+        None,  # Reset subregion dropdown to None or default value
+        None,  # Reset country dropdown to None or default value
+        [2000, 2024],  # Reset year slider to the default range
+        None,          # Reset month dropdown to None or default value
+        disaster_types # Reset disaster type checklist to the original list
+    )
+
 
 
 # Stats: Update all the statistics cards
@@ -468,7 +512,7 @@ def plot_map_disaster_count_heat(selected_continent, selected_subregion, selecte
 
     # Create choropleth map for total number of disasters
     disaster_count_filtered = filtered_data.groupby('country')['id'].count().reset_index()
-    disaster_count_filtered.columns = ['latitude', 'longitude', 'country', 'total_disasters']
+    disaster_count_filtered.columns = ['country', 'total_disasters']
     
     fig = px.scatter_geo(
         disaster_count_filtered,
@@ -549,7 +593,7 @@ def plot_bar_total_disaster(selected_continent, selected_subregion, selected_cou
         legend=dict(
             orientation='h',
             yanchor="bottom",
-            y=1.02,
+            y=-0.2,
             xanchor="right",
             x=1
         )
