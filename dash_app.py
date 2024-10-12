@@ -57,7 +57,11 @@ min_year = min(years)
 
 
 #### DASH APP
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(
+    __name__, 
+    external_stylesheets=[dbc.themes.BOOTSTRAP],
+    meta_tags=[{'name': 'viewport', 'content': 'width=device-width, initial-scale=1'}]
+)
 server = app.server
 
 # Layout of the dashboard: Consists of 2 rows.
@@ -314,7 +318,6 @@ app.layout = html.Div([
                 'flex-column'
             ],
             xs=12, sm=12, md=2, lg=2, xl=2),
-        
         # Col 2: Map and chart A
         dbc.Col(
             [
@@ -465,8 +468,8 @@ def plot_map_disaster_count_heat(selected_continent, selected_subregion, selecte
 
     # Create choropleth map for total number of disasters
     disaster_count_filtered = filtered_data.groupby('country')['id'].count().reset_index()
-    disaster_count_filtered.columns = ['country', 'total_disasters']
-
+    disaster_count_filtered.columns = ['latitude', 'longitude', 'country', 'total_disasters']
+    
     fig = px.scatter_geo(
         disaster_count_filtered,
         locations='country',
