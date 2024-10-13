@@ -33,14 +33,18 @@ else:
     print("Failed to load the file after 3 attempts, make sure you are choosing the relative file path.")
 
 # Choose desired variables and make a copy to avoid the warning
-data = df[["DisNo.", "Disaster Type", "ISO", "Country", "Subregion", "Region", "Start Year", "Start Month", 
-             "Total Deaths", "Total Affected", "Total Damage, Adjusted ('000 US$)", "Last Update"]].copy()
+data = df[["DisNo.", "Disaster Type", "ISO", "Country", "Subregion", "Region", 
+            #"Latitude", "Longitude", 
+            "Start Year", "Start Month", 
+            "Total Deaths", "Total Affected", "Total Damage, Adjusted ('000 US$)", "Last Update"]].copy()
 
 # Rename the columns
 data.rename(
     columns = {
         "DisNo.": "id", "Disaster Type": "type", "ISO": "iso", "Country": "country", 
-        "Subregion": "subregion", "Region": "region", "Start Year": "year", "Start Month": "month", 
+        "Subregion": "subregion", "Region": "region", 
+        #"Latitude": "latitude", "Longitude": "logitude",
+        "Start Year": "year", "Start Month": "month", 
         "Total Deaths": "total_deaths", "Total Affected": "total_affected", 
         "Total Damage, Adjusted ('000 US$)": "total_damage", "Last Update": "last_update"
     },
