@@ -6,6 +6,7 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 import numpy as np
 import plotly.express as px
+import plotly.graph_objects as go  
 import webbrowser
 from threading import Timer
 # Load pre-defined functions that help our work
@@ -407,42 +408,98 @@ def update_stat_cards(selected_continent, selected_subregion, selected_country, 
      Input('month-dropdown', 'value'),
      Input('disaster-type-checkbox', 'value')]
 )
+
 def plot_map_damage_heat(selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type):
-    # Update the plot card header name
+# Update the plot card header name
     base_header = "The total damage caused by "
     card_header_text = generate_header(base_header, selected_disaster_type, selected_year, selected_month)
-    
+
     # Use the helper function to filter data
     filtered_data = apply_filters(data, selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type)
 
-    # Create choropleth map for total damage
+    # Use the pre-existing column 'total_damage_total_country' for total damage per country
+    filtered_data = filtered_data[['country', 'total_damage_total_country']].drop_duplicates()
+
+    # Categorize total damage into 5 categories using 'total_damage_total_country'
+    bins = [-1, 1_000_000, 10_000_000, 100_000_000, 500_000_000, float('inf')]
+    labels = ['0 - 1M', '1M - 10M', '10M - 100M', '100M - 500M', '> 500M']
+
+    # Add the categorization column based on 'total_damage_total_country'
+    filtered_data['damage_category'] = pd.cut(
+        filtered_data['total_damage_total_country'], 
+        bins=bins, 
+        labels=labels,
+        ordered=True
+    )
+
+    # **Ensure 'damage_category' is a categorical type with the specified order**
+    filtered_data['damage_category'] = pd.Categorical(
+        filtered_data['damage_category'],
+        categories=labels,
+        ordered=True
+    )
+
+    # **Identify missing categories**
+    existing_categories = filtered_data['damage_category'].dropna().unique()
+    missing_categories = set(labels) - set(existing_categories)
+
+    if missing_categories:
+        # **Create dummy data for missing categories**
+        missing_df = pd.DataFrame({
+            'country': [None]*len(missing_categories),
+            'total_damage_total_country': [0]*len(missing_categories),
+            'damage_category': pd.Categorical(list(missing_categories), categories=labels, ordered=True)
+        })
+        filtered_data = pd.concat([filtered_data, missing_df], ignore_index=True)
+
+    # **Sort the DataFrame by 'damage_category' to ensure correct plotting order**
+    filtered_data.sort_values('damage_category', inplace=True)
+
+    # **Explicit color mapping to ensure the correct order of categories**
+    category_colors = {
+        '0 - 1M': '#fee5d9',
+        '1M - 10M': '#fcae91',
+        '10M - 100M': '#fb6a4a',
+        '100M - 500M': '#de2d26',
+        '> 500M': '#a50f15'
+    }
+
+    # Create choropleth map for total damage categorized
     fig = px.choropleth(
         filtered_data,
         locations='country',
         locationmode='country names',
-        color='total_damage',
+        color='damage_category',  # Use the 'damage_category' column for color
         hover_name='country',
-        color_continuous_scale='Reds',
-        range_color = [0, 10000000],
-        labels={'total_damage': 'Damage (USD)'}
+        hover_data={'total_damage_total_country': True, 'damage_category': False},  # Show total damage in hover but not the category
+        color_discrete_map=category_colors,  # Use explicit color mapping
+        labels={'damage_category': 'Damage Category', 'total_damage_total_country': 'Total Damage (USD)'},
+        category_orders={'damage_category': labels}  # Force the correct legend order
     )
+
+    # Customize the map's appearance
     fig.update_geos(
         showcoastlines=True,
-        fitbounds = 'locations',
+        fitbounds='locations',
         coastlinecolor="Black",
         showland=True, landcolor="lightgray", visible=False
     )
+
     fig.update_layout(
-        margin={"r":0,"t":0,"l":0,"b":0},
+        margin={"r":0, "t":0, "l":0, "b":0},
         legend=dict(
             orientation='h',
             yanchor="bottom",
             y=1.02,
-            xanchor="right",
-            x=1
+            xanchor="center",
+            x=0.5,
+            font=dict(size=9)  # Adjust this size as needed
         )
     )
+
     return fig, card_header_text
+
+
 
 # Map-B: The disaster count choropleth map based on filters
 @app.callback(
@@ -455,46 +512,132 @@ def plot_map_damage_heat(selected_continent, selected_subregion, selected_countr
      Input('month-dropdown', 'value'),
      Input('disaster-type-checkbox', 'value')]
 )
+
+
 def plot_map_disaster_count_heat(selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type):
     # Update the plot card header name
     base_header = "Total number of "
-    card_header_text = generate_header(base_header, selected_disaster_type, selected_year, selected_month)
+    card_header_text = generate_header(
+        base_header, selected_disaster_type, selected_year, selected_month
+    )
     
     # Use the helper function to filter data
-    filtered_data = apply_filters(data, selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type)
+    filtered_data = apply_filters(
+        data, selected_continent, selected_subregion, selected_country, 
+        selected_year, selected_month, selected_disaster_type
+    )
 
-    # Create choropleth map for total number of disasters
-    disaster_count_filtered = filtered_data.groupby('country')['id'].count().reset_index()
+    # Aggregate the number of disasters per country
+    disaster_count_filtered = (
+        filtered_data.groupby('country')['id'].count().reset_index()
+    )
     disaster_count_filtered.columns = ['country', 'total_disasters']
 
+    # Categorize the total number of disasters into 3 categories
+    bins = [-1, 300, 600, float('inf')]
+    labels = ['0 - 300', '300 - 600', '> 600']
+    
+    # Add the categorization column based on 'total_disasters'
+    disaster_count_filtered['disaster_category'] = pd.cut(
+        disaster_count_filtered['total_disasters'], 
+        bins=bins, 
+        labels=labels, 
+        ordered=True
+    )
+
+    # Ensure 'disaster_category' is a categorical type with the specified order
+    disaster_count_filtered['disaster_category'] = pd.Categorical(
+        disaster_count_filtered['disaster_category'],
+        categories=labels,
+        ordered=True
+    )
+
+    # Identify missing categories
+    existing_categories = disaster_count_filtered['disaster_category'].dropna().unique()
+    missing_categories = set(labels) - set(existing_categories)
+
+    if missing_categories:
+        # Use a valid country that is unlikely to overlap with existing data
+        dummy_country = 'Antarctica'  # Assuming 'Antarctica' is recognized by Plotly
+
+        # Create dummy data for missing categories
+        missing_df = pd.DataFrame({
+            'country': [dummy_country]*len(missing_categories),
+            'total_disasters': [1]*len(missing_categories),  # Small value to avoid zero-size markers
+            'disaster_category': pd.Categorical(
+                list(missing_categories), categories=labels, ordered=True
+            ),
+            'is_dummy': [True]*len(missing_categories)
+        })
+        disaster_count_filtered['is_dummy'] = False  # Add a flag for existing data
+        disaster_count_filtered = pd.concat(
+            [disaster_count_filtered, missing_df], ignore_index=True
+        )
+    else:
+        disaster_count_filtered['is_dummy'] = False
+
+    # Sort the DataFrame by the disaster category to ensure plotting order
+    disaster_count_filtered.sort_values('disaster_category', inplace=True)
+
+    # Explicit color mapping to ensure the correct order of categories
+    category_colors = {
+        '0 - 300': '#fee5d9',
+        '300 - 600': '#de2d26',
+        '> 600': '#a50f15'
+    }
+
+    # Create scatter_geo map for total number of disasters categorized
     fig = px.scatter_geo(
         disaster_count_filtered,
         locations='country',
         locationmode='country names',
-        color='total_disasters',
-        size = 'total_disasters',
-        opacity = 0.6,
+        color='disaster_category',
         hover_name='country',
-        color_continuous_scale='Reds',
-        labels={'total_disasters': 'Total Number of Disasters'}
+        size='total_disasters',
+        hover_data={'total_disasters': True, 'disaster_category': False},
+        color_discrete_map=category_colors,
+        labels={
+            'disaster_category': 'Disaster Category',
+            'total_disasters': 'Total Number of Disasters'
+        },
+        category_orders={'disaster_category': labels}
     )
 
-    fig.update_geos(
-        showcoastlines=True,
-        fitbounds = 'locations',
-        coastlinecolor="Black",
-        showland=True, landcolor="lightgray", visible=False
-    )
-    fig.update_layout(
-        margin={"r":0,"t":0,"l":0,"b":0},
-        legend=dict(
-            yanchor="top",
-            y=0.99,
-            xanchor="left",
-            x=0.01
+    # Update marker opacity to hide dummy data points
+    fig.update_traces(
+        selector=dict(mode='markers'),
+        marker=dict(
+            opacity=disaster_count_filtered['is_dummy'].map({True: 0, False: 0.6}).tolist()
         )
     )
+
+    # Customize the map's appearance
+    fig.update_geos(
+        showcoastlines=True,
+        fitbounds='locations',
+        coastlinecolor="Black",
+        showland=True,
+        landcolor="lightgray",
+        visible=False
+    )
+    
+    # Adjust the layout and margins, ensuring all categories are visible and correctly ordered
+    fig.update_layout(
+        margin={"r": 0, "t": 0, "l": 0, "b": 0},
+        legend=dict(
+            orientation='h',
+            yanchor="bottom",
+            y=1.02,
+            xanchor="center",
+            x=0.5,
+            traceorder="normal",
+            itemsizing="constant",
+            title_text="Disaster Category"
+        )
+    )
+
     return fig, card_header_text
+
 
 # Chart-A: The stacked bar chart based on filters
 @app.callback(
