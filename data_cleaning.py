@@ -97,7 +97,22 @@ type_codes = {
 # Create a new column 'type_code' by mapping the disaster types to their integer codes
 data['type_code'] = data['type'].map(type_codes)
 
-# Export the final data
+# Aggregate total_damage by country (to get the total damage across all events per country)
+agg_damage = data.groupby('country')['total_damage'].sum().reset_index()
+
+# Merge the aggregated damage data back into the main dataset
+data = pd.merge(data, agg_damage, on='country', suffixes=('', '_total_country'))
+
+# Now categorize total_damage based on the sum of all damages per country (from the _total_country column)
+bins = [-1, 1000000, 10000000, 100000000, 500000000, float('inf')]
+labels = ['0 - 1M', '1M - 10M', '10M - 100M', '100M - 500M', '> 500M']
+
+# Create a new column 'damage_category' using pd.cut to categorize the total damage based on the country-wide sum
+data['damage_category'] = pd.cut(data['total_damage_total_country'], bins=bins, labels=labels)
+
+# Export the final data (with disaster events retained and categorized by country-wide total damage)
 data.to_excel("dataset/cleaned_emrat.xlsx")
 
 print("Data cleaned and saved successfully!")
+
+
