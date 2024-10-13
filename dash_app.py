@@ -479,19 +479,19 @@ def plot_map_damage_heat(selected_continent, selected_subregion, selected_countr
         ordered=True
     )
 
-    # **Ensure 'damage_category' is a categorical type with the specified order**
+    # Ensure 'damage_category' is a categorical type with the specified order
     filtered_data['damage_category'] = pd.Categorical(
         filtered_data['damage_category'],
         categories=labels,
         ordered=True
     )
 
-    # **Identify missing categories**
+    # Identify missing categories
     existing_categories = filtered_data['damage_category'].dropna().unique()
     missing_categories = set(labels) - set(existing_categories)
 
     if missing_categories:
-        # **Create dummy data for missing categories**
+        # Create dummy data for missing categories
         missing_df = pd.DataFrame({
             'country': [None]*len(missing_categories),
             'total_damage_total_country': [0]*len(missing_categories),
@@ -499,10 +499,10 @@ def plot_map_damage_heat(selected_continent, selected_subregion, selected_countr
         })
         filtered_data = pd.concat([filtered_data, missing_df], ignore_index=True)
 
-    # **Sort the DataFrame by 'damage_category' to ensure correct plotting order**
+    # Sort the DataFrame by 'damage_category' to ensure correct plotting order
     filtered_data.sort_values('damage_category', inplace=True)
 
-    # **Explicit color mapping to ensure the correct order of categories**
+    # Explicit color mapping to ensure the correct order of categories
     category_colors = {
         '0 - 1M': '#fee5d9',
         '1M - 10M': '#fcae91',
@@ -536,11 +536,12 @@ def plot_map_damage_heat(selected_continent, selected_subregion, selected_countr
         margin={"r":0, "t":0, "l":0, "b":0},
         legend=dict(
             orientation='h',
-            yanchor="bottom",
-            y=1.02,
+            yanchor="top",
+            y=-0.1,
             xanchor="center",
             x=0.5,
-            font=dict(size=9)  # Adjust this size as needed
+            font=dict(size=9),
+            title=dict(text="Total Damage (USD)", side="top")  # Add this line for the legend title
         )
     )
 
@@ -581,8 +582,8 @@ def plot_map_disaster_count_heat(selected_continent, selected_subregion, selecte
     disaster_count_filtered.columns = ['country', 'total_disasters']
 
     # Categorize the total number of disasters into 3 categories
-    bins = [-1, 300, 600, float('inf')]
-    labels = ['0 - 300', '300 - 600', '> 600']
+    bins = [-1, 150, 300, 450, 600, float('inf')]
+    labels = ['0 - 150', '150 - 300', '300 - 450', '450 - 600', '> 600']
     
     # Add the categorization column based on 'total_disasters'
     disaster_count_filtered['disaster_category'] = pd.cut(
@@ -626,11 +627,13 @@ def plot_map_disaster_count_heat(selected_continent, selected_subregion, selecte
     # Sort the DataFrame by the disaster category to ensure plotting order
     disaster_count_filtered.sort_values('disaster_category', inplace=True)
 
-    # Explicit color mapping to ensure the correct order of categories
+    # **Explicit color mapping to ensure the correct order of categories**
     category_colors = {
-        '0 - 300': '#fee5d9',
-        '300 - 600': '#de2d26',
-        '> 600': '#a50f15'
+        '0 - 150': '#fee5d9',    # Light color for low disaster counts
+        '150 - 300': '#fcae91',  # Slightly darker color for mid-low counts
+        '300 - 450': '#fb6a4a',  # Darker color for mid-high counts
+        '450 - 600': '#de2d26',  # Even darker color for higher counts
+        '> 600': '#a50f15'       # Darkest color for the highest count
     }
 
     # Create scatter_geo map for total number of disasters categorized
@@ -673,13 +676,14 @@ def plot_map_disaster_count_heat(selected_continent, selected_subregion, selecte
         margin={"r": 0, "t": 0, "l": 0, "b": 0},
         legend=dict(
             orientation='h',
-            yanchor="bottom",
-            y=1.02,
+            yanchor="top",
+            y=-0.1,
             xanchor="center",
             x=0.5,
             traceorder="normal",
             itemsizing="constant",
-            title_text="Disaster Category"
+            font=dict(size=9),
+            title=dict(text="Number of Disasters", side="top")
         )
     )
 
@@ -754,6 +758,8 @@ def plot_bar_total_disaster(selected_continent, selected_subregion, selected_cou
      Input('month-dropdown', 'value'),
      Input('disaster-type-checkbox', 'value')]
 )
+
+
 def plot_line_casualty_trend(selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type):
     # Update the plot card header name
     base_header = "Casualty caused by "
@@ -762,37 +768,36 @@ def plot_line_casualty_trend(selected_continent, selected_subregion, selected_co
     # Use the helper function to filter data
     filtered_data = apply_filters(data, selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type)
 
-    # Group by year and calculate total deaths
-    deaths_by_year = filtered_data.groupby('year')['total_deaths'].sum().reset_index()
+    # Group by year and country to calculate total deaths
+    deaths_by_country_year = filtered_data.groupby(['year', 'country'])['total_deaths'].sum().reset_index()
     
     # Convert 'year' to int
-    deaths_by_year['year'] = deaths_by_year['year'].astype(int)
+    deaths_by_country_year['year'] = deaths_by_country_year['year'].astype(int)
 
     # Create the line chart for Casualty Trend
     fig = px.line(
-        deaths_by_year,
+        deaths_by_country_year,
         x='year',
         y='total_deaths',
+        color='country',  # Differentiate countries
         labels={'total_deaths': 'Total Deaths', 'year': 'Year'},
+        line_group='country'  # Ensure separate lines for each country
     )
+
+    # Customize the hover information to show only the relevant country
+    for trace in fig.data:
+        trace.hovertemplate = f'{trace.name}<br>Year: %{{x}}<br>Total Deaths: %{{y}}<extra></extra>'
 
     # Customize the layout of the line chart
     fig.update_layout(
-        xaxis = dict(
-            title = 'Year',
-            tickvals = [i for i in range(2000, 2025, 4)],
+        xaxis=dict(
+            title='Year',
+            tickvals=[i for i in range(2000, 2025, 4)],
         ),
         yaxis_title='Total Deaths',
         plot_bgcolor='white',
-        hovermode='x unified',
         margin=dict(l=40, r=40, t=40, b=40),
-        legend=dict(
-            orientation='h',
-            yanchor="bottom",
-            y=1.02,
-            xanchor="right",
-            x=1
-        )
+        showlegend=False  # Hide the legend
     )
 
     return fig, card_header_text
