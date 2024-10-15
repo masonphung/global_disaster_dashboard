@@ -96,7 +96,8 @@ app.layout = html.Div([
                             step=1,
                             value=[2000, 2024],
                             marks={str(i): {'label': str(i)} for i in range(2000, 2025, 4)},
-                            tooltip={"placement": "bottom", "always_visible": True}
+                            tooltip={"placement": "bottom", "always_visible": True},
+                            #className="form-range"
                         ),
                         html.Label('Month'),
                         dcc.Dropdown(
@@ -127,7 +128,7 @@ app.layout = html.Div([
                         dcc.Dropdown(
                             id='continent-dropdown',
                             options=[{'label': c, 'value': c} for c in continents],
-                            placeholder='Select Continent'
+                            placeholder='Select Continent',
                         ),
                         html.Label('Subregion'),
                         dcc.Dropdown(
@@ -147,6 +148,7 @@ app.layout = html.Div([
                     html.Div([
                         html.Label('Disaster Type'),
                         dcc.Checklist(
+                            className="form-check",
                             id='disaster-type-checkbox',
                             options = [
                                 {
@@ -469,7 +471,7 @@ def plot_map_damage_heat(selected_continent, selected_subregion, selected_countr
         locationmode='country names',
         color='total_damage',
         hover_name='country',
-        color_continuous_scale='Reds',
+        color_continuous_scale='OrRd',
         range_color = [0, 10000000],
         labels={'total_damage': 'Damage (USD)'}
     )
@@ -522,7 +524,7 @@ def plot_map_disaster_count_heat(selected_continent, selected_subregion, selecte
         size = 'total_disasters',
         opacity = 0.6,
         hover_name='country',
-        color_continuous_scale='Reds',
+        color_continuous_scale='OrRd',
         labels={'total_disasters': 'Total Number of Disasters'}
     )
 
@@ -570,8 +572,8 @@ def plot_bar_total_disaster(selected_continent, selected_subregion, selected_cou
     
     # Map the colors based on the disaster type
     disaster_colors = {
-        'Drought': 'gold', 'Extreme temperature': 'red', 'Volcanic activity': 'brown', 'Wildfire': 'orange', 
-        'Earthquake': 'gray', 'Mass movement': 'green', 'Flood': 'blue', 'Storm': 'lightblue'}
+        'Drought': '#4C230A', 'Extreme temperature': '#E34B48', 'Volcanic activity': '#0D160B', 'Wildfire': 'orange', 
+        'Earthquake': '#555B6E', 'Mass movement': '#84B59F', 'Flood': '#568EA3', 'Storm' : '#BBE5ED'}
     
     # Create stacked bar chart for total disasters by type and year
     fig = px.bar(
@@ -631,6 +633,7 @@ def plot_line_casualty_trend(selected_continent, selected_subregion, selected_co
         x='year',
         y='total_deaths',
         labels={'total_deaths': 'Total Deaths', 'year': 'Year'},
+        color_discrete_sequence=['#E34B48']
     )
 
     # Customize the layout of the line chart

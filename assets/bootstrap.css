@@ -18,7 +18,7 @@
   --bs-indigo: #6610f2;
   --bs-purple: #6f42c1;
   --bs-pink: #e83e8c;
-  --bs-red: #e74c3c;
+  --bs-red: #FF7A67;
   --bs-orange: #fd7e14;
   --bs-yellow: #f39c12;
   --bs-green: #18bc9c;
@@ -204,6 +204,8 @@
 - Card (header, body)
 - H1, H3, P, span, label
 - button
+- slider
+- Red and orange
 */
 
 /* Newly added */
@@ -214,6 +216,37 @@ filter-icon {
   padding-left: 10;
 }
 
+/*for slider*/
+.rc-slider-track {
+  background-color: var(--bs-red);
+}
+
+.rc-slider-handle {
+  border-color: black;
+  background-color: black;
+}
+
+.rc-slider-handle:hover{
+  border-color: var(--bs-red) !important;
+}
+
+/*When clicking on/draging*/
+.rc-slider-handle:active{
+  border-color: var(--bs-red) !important;
+  box-shadow:10 10 10px var(--bs-red) !important;
+}
+
+.rc-slider-handle:focus{
+  border-color: #53917E !important;
+  box-shadow:10 10 10px var(--bs-red) !important;
+}
+
+.rc-slider-dot {
+  border-color: black;
+  background-color: black;
+}
+/*for slider*/
+
 
 body {
   margin: 0;
@@ -223,7 +256,7 @@ body {
   line-height: var(--bs-body-line-height);
   color: var(--bs-body-color);
   text-align: var(--bs-body-text-align);
-  background-color: var(--bs-body-bg);
+  background-color: #EDEDED;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -241,11 +274,15 @@ h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
   margin-bottom: 0.5rem;
   font-weight: 500;
   line-height: 1.2;
-  color: var(--bs-heading-color);
+  color: var(--bs-red);
 }
 
 h1, .h1 {
   font-size: calc(1.425rem + 1.5vw);
+  color: #2E0E02;
+  /*
+  
+  */
 }
 @media (min-width: 1200px) {
   h1, .h1 {
@@ -270,7 +307,7 @@ h3, .h3 {
 @media (min-width: 1200px) {
   h3, .h3 {
     font-size: calc(1rem + 0.9vw);
-    color: var(--bs-red);
+    color: #4C230A;
   }
 }
 
@@ -467,6 +504,7 @@ th {
 label {
   display: inline-block;
   font-size: calc(0.75rem + 0.3vw);
+  color: #4C230A;
 }
 
 span {
@@ -2424,6 +2462,14 @@ textarea.form-control-lg {
   margin-left: 0;
 }
 
+.form-check {
+  accent-color: var(--bs-red) !important;
+}
+
+.form-check[type=checkbox] {
+  border-radius: 0.25em;
+}
+
 .form-check-input {
   --bs-form-check-bg: var(--bs-body-bg);
   flex-shrink: 0;
@@ -2544,6 +2590,7 @@ textarea.form-control-lg {
   -moz-appearance: none;
   appearance: none;
   background-color: transparent;
+  accent-color: var(--bs-red);
 }
 .form-range:focus {
   outline: 0;
@@ -3093,7 +3140,7 @@ textarea.form-control-lg {
   --bs-btn-bg: var(--bs-red);
   --bs-btn-border-color: #2c3e50;
   --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: var(--bs-red);
+  --bs-btn-hover-bg: #53917E;
   --bs-btn-hover-border-color: #233240;
   --bs-btn-focus-shadow-rgb: 76, 91, 106;
   --bs-btn-active-color: #fff;
@@ -4471,7 +4518,7 @@ textarea.form-control-lg {
 .card-body {
   flex: 1 1 auto;
   padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
-  color: var(--bs-card-color);
+  color: #4C230A;
   text-align: center;
   align-items: center
 }
@@ -4500,7 +4547,7 @@ textarea.form-control-lg {
   font-size: 1.75vh;
   font-weight: bold;
   margin-bottom: 0;
-  color: var(--bs-card-cap-color);
+  color: #E34B48;
   background-color: var(--bs-card-cap-bg);
   border-bottom: var(--bs-card-border-width) solid var(--bs-card-border-color);
 }
