@@ -24,7 +24,7 @@ def apply_filters(data, selected_continent=None, selected_subregion=None,
     - DataFrame: A filtered DataFrame containing only the rows that meet the specified criteria.
     """
     filtered_data = data.copy()
-
+    
     # Apply continent filter
     if selected_continent:
         filtered_data = filtered_data[filtered_data['region'] == selected_continent]
@@ -106,25 +106,15 @@ def generate_header(header_text, selected_disasters, selected_year, selected_mon
 
     return header_text
 
-
-def create_plot_card(plot_id, header_id):
-    """
-    Create a Dash Card component for displaying a plot with a dynamic header.
-
-    Parameters:
-    - plot_id (str): The ID of the plot component.
-    - selected_disasters (list): A list of selected disaster types.
-    - selected_year (int or list): The selected year or a range of years as a list.
-    - selected_month (int): The selected month as a number (1-12).
-
-    Returns:
-        dbc.Card: A Dash Bootstrap Card component containing the plot and dynamic header.
-    """
-    return dbc.Card([
-        dbc.CardHeader(id=header_id),  # Dynamic header
-        dbc.CardBody(
-            html.Div(
-                dcc.Graph(id=plot_id, style={'height': '500px'})
-            )
-        )
-    ])
+# Change the int value into a shorter format
+def format_value(value):
+    if value is None:
+        return "N/A"
+    elif value < 1_000:
+        return f"{value:.0f}"  # No suffix for values below 1K
+    elif value < 1_000_000:
+        return f"{value / 1_000:.1f}K"  # Thousands
+    elif value < 1_000_000_000:
+        return f"{value / 1_000_000:.1f}M"  # Millions
+    else:
+        return f"{value / 1_000_000_000:.1f}B"  # Billions

@@ -79,7 +79,7 @@
   --bs-dark-border-subtle: #b4bcc2;
   --bs-white-rgb: 255, 255, 255;
   --bs-black-rgb: 0, 0, 0;
-  --bs-font-sans-serif: Lato, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --bs-font-sans-serif: "Daikon", Lato, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
   --bs-body-font-family: var(--bs-font-sans-serif);
@@ -302,7 +302,7 @@ h2, .h2 {
 /**/
 h3, .h3 {
   font-size: calc(1rem + 0.9vw);
-  color: var(--bs-red);
+  color: #4C230A;
 }
 @media (min-width: 1200px) {
   h3, .h3 {
@@ -328,8 +328,9 @@ h6, .h6 {
   font-size: 1rem;
 }
 
+/*Edit the-p*/
 p {
-  font-size: 1.5vh;
+  font-size: calc(0.04rem + 0.9vw);
 }
 
 abbr[title] {
@@ -876,6 +877,7 @@ progress {
 
 .col {
   flex: 1 0 0%;
+  height: 100%;
 }
 
 .row-cols-auto > * {
@@ -4514,15 +4516,25 @@ textarea.form-control-lg {
 .card > .list-group + .card-footer {
   border-top: 0;
 }
-
 /**/
 .card-body {
   flex: 1 1 auto;
   padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
   color: #4C230A;
-  text-align: center;
-  align-items: center
+  text-align: center;  /* Centers text horizontally */
+  width: 100%
 }
+
+.card-stats-body {
+  flex: 1 1 auto;
+  padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
+  color: #4C230A;
+  text-align: center;  /* Centers text horizontally */
+  justify-content: center;  /* Centers content horizontally */
+  align-items: center;  /* Centers content vertically */
+  flex-direction: column;
+}
+
 
 .card-title {
   margin-bottom: var(--bs-card-title-spacer-y);
@@ -4542,16 +4554,29 @@ textarea.form-control-lg {
 .card-link + .card-link {
   margin-left: var(--bs-card-spacer-x);
 }
-/**/
-.card-header {
+
+.tooltip-header {
   padding: var(--bs-card-cap-padding-y) var(--bs-card-cap-padding-x);
-  font-size: 1.75vh;
+  font-size: 1.5vh;
   font-weight: bold;
   margin-bottom: 0;
   color: #E34B48;
   background-color: var(--bs-card-cap-bg);
   border-bottom: var(--bs-card-border-width) solid var(--bs-card-border-color);
 }
+
+/**/
+.card-header {
+  padding: var(--bs-card-cap-padding-y) var(--bs-card-cap-padding-x);
+  font-size: calc(0.8rem+0.9vw);
+  font-weight: bold;
+  margin-bottom: 0;
+  color: #E34B48;
+  background-color: var(--bs-card-cap-bg);
+  border-bottom: var(--bs-card-border-width) solid var(--bs-card-border-color);
+}
+
+
 .card-header:first-child {
   border-radius: var(--bs-card-inner-border-radius) var(--bs-card-inner-border-radius) 0 0;
 }
@@ -7821,7 +7846,7 @@ textarea.form-control-lg {
 }
 
 .vh-75 {
-  height: 75 !important;
+  height: 75vh !important;
 }
 
 .vh-100 {
