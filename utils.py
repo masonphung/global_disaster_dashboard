@@ -80,7 +80,7 @@ def generate_header(header_text, selected_disasters, selected_year, selected_mon
     # Year or range of years logic
     if isinstance(selected_year, list):  # If it's a year range
         if selected_year[0] != selected_year[1]:
-            header_text += f" from {selected_year[0]} to {selected_year[1]}"
+            header_text += f", {selected_year[0]} to {selected_year[1]}"
         else:
             header_text += f" in {selected_year[0]}"
     elif selected_year is not None:

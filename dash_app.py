@@ -460,7 +460,7 @@ def update_stat_cards(selected_continent, selected_subregion, selected_country, 
 
 def plot_map_damage_heat(selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type):
 # Update the plot card header name
-    base_header = "The total damage caused by "
+    base_header = "Total damage inflicted by "
     card_header_text = generate_header(base_header, selected_disaster_type, selected_year, selected_month)
 
     # Use the helper function to filter data
@@ -538,7 +538,7 @@ def plot_map_damage_heat(selected_continent, selected_subregion, selected_countr
         margin={"r":0, "t":0, "l":0, "b":0},
         legend=dict(
             orientation='h',
-            yanchor="top",
+            yanchor="bottom",
             y=-0.1,
             xanchor="center",
             x=0.5,
@@ -564,7 +564,7 @@ def plot_map_damage_heat(selected_continent, selected_subregion, selected_countr
 )
 
 
-def plot_map_disaster_count_heat(selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type):
+def plot_map_disaster_count_bubble(selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type):
     # Update the plot card header name
     base_header = "Total number of "
     card_header_text = generate_header(
@@ -764,7 +764,7 @@ def plot_bar_total_disaster(selected_continent, selected_subregion, selected_cou
 
 def plot_line_casualty_trend(selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type):
     # Update the plot card header name
-    base_header = "Casualty caused by "
+    base_header = "Number of deaths from "
     card_header_text = generate_header(base_header, selected_disaster_type, selected_year, selected_month)
     
     # Use the helper function to filter data
@@ -794,9 +794,12 @@ def plot_line_casualty_trend(selected_continent, selected_subregion, selected_co
     fig.update_layout(
         xaxis=dict(
             title='Year',
-            tickvals=[i for i in range(2000, 2025, 4)],
+            tickvals=[i for i in range(2000, 2025, 4)]
         ),
-        yaxis_title='Total Deaths',
+        yaxis = dict(
+            title='Total Deaths',  
+            showgrid=True, gridwidth=1, gridcolor='black', griddash = 'dash'
+        ),
         plot_bgcolor='white',
         margin=dict(l=40, r=40, t=40, b=40),
         showlegend=False  # Hide the legend
