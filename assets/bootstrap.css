@@ -280,15 +280,29 @@ h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
 h1, .h1 {
   font-size: calc(1.425rem + 1.5vw);
   color: #2E0E02;
+  font-family: 'Arial Black'
   /*
   
   */
 }
+
+.dflex1 {
+  display: flex;
+  justify-content: center;  /* Centers content horizontally */
+  align-items: center;  /* Centers content vertically */
+  text-align: center;  /* Ensures the text is aligned in the center */
+  flex-direction: column;  /* Makes sure the text stacks vertically */
+  height: 100%;  /* Makes sure the column fills available height */
+}
+
+
 @media (min-width: 1200px) {
   h1, .h1 {
     font-size: 3rem;
   }
 }
+
+
 
 h2, .h2 {
   font-size: calc(1.375rem + 1.5vw);
@@ -4493,6 +4507,7 @@ textarea.form-control-lg {
   background-clip: border-box;
   border: var(--bs-card-border-width) solid var(--bs-card-border-color);
   border-radius: var(--bs-card-border-radius);
+  box-shadow: 5px 7px #858585;
 }
 .card > hr {
   margin-right: 0;

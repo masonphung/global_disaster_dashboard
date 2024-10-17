@@ -17,7 +17,6 @@ file_path = 'dataset/cleaned_emrat.xlsx'
 data = pd.read_excel(file_path)
 
 
-
 #### I. DATA & FUNCTIONS PREPARATION 
 # Make sure datatypes are correct
 data['last_update'] = pd.to_datetime(data['last_update'], errors='coerce')
@@ -79,7 +78,7 @@ app.layout = html.Div([
         dbc.Col(
             [html.H1('Global Disaster Statistics'),
              html.P(id='last-updated-card')],
-            className = ['col', 'text-center'],
+            className = ['col', 'text-center', 'justify-content-center','align-content-center'],
             xs=12, sm=12, md=12, lg=2, xl=2 # Match with Col 2 of Row 1
         ),
         # Col 2 of Row 1: Filters
@@ -645,8 +644,14 @@ def mapA_damage_choropleth(data):
     filtered_data.sort_values('damage_category', inplace=True)
 
     # Explicit color mapping to ensure the correct order of categories
-    color_list = ['#fee5d9','#fcae91','#fb6a4a','#de2d26','#a50f15']
-    category_colors = {label: color for label, color in zip(labels, color_list)}
+#    category_colors = {
+#        '0 - 1M': '#fee5d9',
+#        '1M - 10M': '#fcae91',
+#        '10M - 100M': '#fb6a4a',
+#        '100M - 500M': '#de2d26',
+#        '> 500M': '#a50f15'
+#    }
+    category_color = {labels[i]: map_color[i] for i in range(len(labels))}
 
     # Create choropleth map for total damage categorized
     fig = px.choropleth(
@@ -654,7 +659,7 @@ def mapA_damage_choropleth(data):
         locations='country',
         locationmode='country names',
         color='damage_category',  # Use the 'damage_category' column for color
-        color_discrete_map=category_colors,  # Use explicit color mapping
+        color_discrete_map=category_color,  # Use explicit color mapping
         hover_name='country',  # Country name shown on hover
         custom_data=['damage_by_country'],  # Add damage category to custom data
         category_orders={'damage_category': labels}  # Force the correct legend order
@@ -798,13 +803,17 @@ def mapB_disaster_count_choropleth(data):
     # Sort the DataFrame by the disaster category to ensure plotting order
     disaster_count_filtered.sort_values('disaster_category', inplace=True)
 
+    # **Explicit color mapping to ensure the correct order of categories**
+    category_color = {labels[i]: map_color[i] for i in range(len(labels))}
+
+
     # Create scatter_geo map for total number of disasters categorized
     fig = px.choropleth(
         disaster_count_filtered,
         locations='country',
         locationmode='country names',
         color='disaster_category',
-        color_discrete_map=category_colors,
+        color_discrete_map=category_color,
         hover_name='country',  # Country name shown on hover
         custom_data=['total_disasters', 'disaster_category'],
         category_orders={'disaster_category': labels}
@@ -896,10 +905,9 @@ def plot_bar_total_disaster(data):
     disasters_type_and_year['year'] = disasters_type_and_year['year'].astype(int)
     
     # Map the colors based on the disaster type
-    disaster_colors = {
-        'Drought': '#4C230A', 'Extreme temperature': '#E34B48', 'Volcanic activity': '#0D160B', 'Wildfire': 'orange', 
-        'Earthquake': '#555B6E', 'Mass movement': '#84B59F', 'Flood': '#568EA3', 'Storm' : '#BBE5ED'}
-    
+    disaster_colors = {disaster_types[i]: color_list[i] for i in range(len(disaster_types))}
+
+
     # Create stacked bar chart for total disasters by type and year
     fig = px.bar(
         disasters_type_and_year,
