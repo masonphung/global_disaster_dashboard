@@ -345,7 +345,8 @@ app.layout = html.Div([
                             dcc.Tooltip(id='damage-map-tooltip', border_color = '#4C230A')
                         ], style={'height': '100%'})
                     )
-                ], className = 'card mb-2 h-100'),
+                    ], className = 'card mb-2 h-100'
+                ),
                 dbc.Card([
                     dbc.CardHeader(id='disaster-count-map-header'),
                     dbc.CardBody(
@@ -359,7 +360,8 @@ app.layout = html.Div([
                             dcc.Tooltip(id='disaster-count-map-tooltip', border_color = '#4C230A')
                         ], style={'height': '100%'})
                     ),
-                ], className = 'card mb-2 h-100'),
+                    ], className = 'card mb-2 h-100'
+                ),
             ], 
             className=['col','d-flex','flex-column', 'vh-100'],  
             xs=12, sm=12, md=12, lg=12, xl=5  # Match with other Cols of Row 2
@@ -379,7 +381,8 @@ app.layout = html.Div([
                             dcc.Tooltip(id='stacked-bar-chart-tooltip', border_color = '#4C230A')
                         ], style={'height': '100%'})
                     ),
-                ], className = 'card mb-2 h-100'),
+                    ], className = 'card mb-2 h-100'
+                ),
                 dbc.Card([
                     dbc.CardHeader(id='casualty-trend-header'),
                     dbc.CardBody(
@@ -392,14 +395,19 @@ app.layout = html.Div([
                             dcc.Tooltip(id='casualty-trend-tooltip', border_color = '#4C230A')
                     ], style={'height': '100%'})
                     )
-                ], className = 'card mb-2 h-100')
+                    ], className = 'card mb-2 h-100'
+                )
             ], 
             className=['col','d-flex','flex-column', 'vh-100'],  
             xs=12, sm=12, md=12, lg=12, xl=5  # Match with other Cols of Row 2
         ),
     ], className = ['row', 'vh-75']), # Match with Row 1 classes
     # Hidden: back-end component to store the filtered data for quick access, reduce loading time
-    dcc.Store(id='store-data', storage_type='memory')
+    dcc.Store(id='store-data', storage_type='session'),
+    dcc.Loading(
+        id="loading",
+        type="default",
+    ),
 ])
 
 # Store filter data for quick access
