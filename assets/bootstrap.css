@@ -15,10 +15,11 @@
 :root,
 [data-bs-theme=light] {
   --bs-blue: #2c3e50;
+  --bs-brown: #712805;
   --bs-indigo: #6610f2;
   --bs-purple: #6f42c1;
   --bs-pink: #e83e8c;
-  --bs-red: #FF7A67;
+  --bs-red: #C44802;
   --bs-orange: #fd7e14;
   --bs-yellow: #f39c12;
   --bs-green: #18bc9c;
@@ -79,7 +80,7 @@
   --bs-dark-border-subtle: #b4bcc2;
   --bs-white-rgb: 255, 255, 255;
   --bs-black-rgb: 0, 0, 0;
-  --bs-font-sans-serif: "Daikon", Lato, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --bs-font-sans-serif: Roboto, "Daikon", Lato, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
   --bs-body-font-family: var(--bs-font-sans-serif);
@@ -279,20 +280,10 @@ h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
 
 h1, .h1 {
   font-size: calc(1.425rem + 1.5vw);
-  color: #2E0E02;
-  font-family: 'Arial Black'
+  color: var(--bs-brown);
   /*
   
   */
-}
-
-.dflex1 {
-  display: flex;
-  justify-content: center;  /* Centers content horizontally */
-  align-items: center;  /* Centers content vertically */
-  text-align: center;  /* Ensures the text is aligned in the center */
-  flex-direction: column;  /* Makes sure the text stacks vertically */
-  height: 100%;  /* Makes sure the column fills available height */
 }
 
 
@@ -316,12 +307,11 @@ h2, .h2 {
 /**/
 h3, .h3 {
   font-size: calc(1rem + 0.9vw);
-  color: #4C230A;
 }
 @media (min-width: 1200px) {
   h3, .h3 {
     font-size: calc(1rem + 0.9vw);
-    color: #4C230A;
+    color: #C44802;
   }
 }
 
@@ -519,7 +509,7 @@ th {
 label {
   display: inline-block;
   font-size: calc(0.75rem + 0.3vw);
-  color: #4C230A;
+  color: var(--bs-brown);
 }
 
 span {
@@ -3154,10 +3144,10 @@ textarea.form-control-lg {
 /**/
 .btn-primary {
   --bs-btn-color: #fff;
-  --bs-btn-bg: var(--bs-red);
+  --bs-btn-bg: var(--bs-brown);
   --bs-btn-border-color: #2c3e50;
   --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: #53917E;
+  --bs-btn-hover-bg: #96BBBB;
   --bs-btn-hover-border-color: #233240;
   --bs-btn-focus-shadow-rgb: 76, 91, 106;
   --bs-btn-active-color: #fff;
@@ -4507,7 +4497,7 @@ textarea.form-control-lg {
   background-clip: border-box;
   border: var(--bs-card-border-width) solid var(--bs-card-border-color);
   border-radius: var(--bs-card-border-radius);
-  box-shadow: 5px 7px #858585;
+  box-shadow: 4px 5px #E0E0E0;
 }
 .card > hr {
   margin-right: 0;
@@ -4543,7 +4533,7 @@ textarea.form-control-lg {
 .card-stats-body {
   flex: 1 1 auto;
   padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
-  color: #4C230A;
+  color: var(--bs-brown);
   text-align: center;  /* Centers text horizontally */
   justify-content: center;  /* Centers content horizontally */
   align-items: center;  /* Centers content vertically */
@@ -4586,7 +4576,7 @@ textarea.form-control-lg {
   font-size: calc(0.8rem+0.9vw);
   font-weight: bold;
   margin-bottom: 0;
-  color: #E34B48;
+  color: var(--bs-brown);
   background-color: var(--bs-card-cap-bg);
   border-bottom: var(--bs-card-border-width) solid var(--bs-card-border-color);
 }

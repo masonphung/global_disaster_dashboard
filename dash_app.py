@@ -78,7 +78,7 @@ app.layout = html.Div([
         dbc.Col(
             [html.H1('Global Disaster Statistics'),
              html.P(id='last-updated-card')],
-            className = ['col', 'text-center', 'justify-content-center','align-content-center'],
+            className = ['align-items-center', 'flex-column', 'text-center', 'justify-content-center','align-content-center'],
             xs=12, sm=12, md=12, lg=2, xl=2 # Match with Col 2 of Row 1
         ),
         # Col 2 of Row 1: Filters
@@ -293,7 +293,7 @@ app.layout = html.Div([
                         html.Div([
                             html.H3(id='most-deaths-country-card')],
                             style={'textAlign': 'center', 'alignItems': 'center'},
-                            className='card-stats-body'
+                            className=('card-stats-body')
                         )
                     )
                 ], className = 'h-100 mb-2'),
@@ -399,7 +399,7 @@ app.layout = html.Div([
         ),
     ], className = ['row', 'vh-75']), # Match with Row 1 classes
     # Hidden: back-end component to store the filtered data for quick access, reduce loading time
-    dcc.Store(id='store-data', storage_type='session')
+    dcc.Store(id='store-data', storage_type='memory')
 ])
 
 # Store filter data for quick access
@@ -1005,7 +1005,8 @@ def plot_line_casualty_trend(data):
         deaths_by_country_year,
         x='year',
         y='total_deaths',
-        markers = True
+        markers = True,
+        color_discrete_sequence=['#FEA50B']
     )
     
     fig.update_traces(
