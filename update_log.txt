@@ -1,0 +1,36 @@
+* 2023/09/24: (Mason) 
+    - Create the repo, clean dataset, requirements.txt
+    - Clean data: 'dataset/cleaned_emrat.xlsx'
+
+* 2023/10/06: (Erik)
+    - Upload basic layout and callbacks
+ 
+* 2023/10/09: (Mason)
+    - Refine layouts, and dbc components for enhanced workflows
+    - Fix bugs and improve plotly charts visualization
+    - Enhance `dash_app.py` documentation, make in-depth comments and explanations
+    - Deploy basic .css bootstrap theme customization
+
+* 2023/10/11: (Mason)
+    - Update dynamic header
+
+* 2023/10/12: (Mason)
+    - Add 'reset filters' button
+    - Enhance responsive sizing
+
+* 2023/10/13-14: (Erik)
+    - Update map legends
+    - Modify line chart to group by countries
+
+* 2023/10/15-16: (Duc)
+    - Employ basic theme
+    - Update color mapping
+
+* 2023/10/17: (Duc)
+    - Enhance theme: coloring, card shadow, font and content centering
+
+* 2023/10/18: (Duc + Mason)
+    - Enhance theme: Fixing bugs, improve theme appearance
+    - ALPHA UPLOAD
+
+
