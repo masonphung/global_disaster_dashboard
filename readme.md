@@ -1,5 +1,6 @@
 ## DataViz Challenge 2024
-Link to The Online Dashboard: https://macquarie-dataviz24-sdg-dashboard.onrender.com
+- Link to The Online Dashboard: https://macquarie-dataviz24-sdg-dashboard.onrender.com
+- We suggest to run the dashboard in Google Chrome for the best experience.
 
 ### Introduction - A dash dashboard presents the global disasterous status
 Our project focuses on developing an interactive dashboard that analyzes global disaster data, sourced from the EM-DAT database, to visualize the impacts of climate-related disasters. By tracking key metrics such as total deaths, affected populations, and economic losses, the dashboard provides valuable insights into disaster trends. These insights support the United Nations' SDG Goal 13.1, which aims to strengthen resilience and adaptive capacity to climate-related hazards. Through this tool, policymakers and disaster management agencies can make informed decisions, helping to reduce the risks associated with climate change and enhance global preparedness for future disasters.
