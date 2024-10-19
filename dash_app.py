@@ -89,7 +89,8 @@ app.layout = html.Div([
         # Col 1 of Row 1: Dashboard title
         dbc.Col(
             [html.H1('Global Disaster Statistics'),
-             html.P(id='last-updated-card')],
+             html.P(id='last-updated-card'),
+             html.P("Press Reset Filter if the plots don't load")],
             className = ['align-items-center', 'flex-column', 'text-center', 'justify-content-center','align-content-center'],
             xs=12, sm=12, md=12, lg=2, xl=2 # Match with Col 2 of Row 1
         ),
@@ -213,7 +214,8 @@ app.layout = html.Div([
                                     ],
                                     id="modal",
                                     is_open=False,
-                                )
+                                ),
+                                
                                 # dbc.Button("Download as JPG", id='download-image') # Under development
                             ])
                         ])
