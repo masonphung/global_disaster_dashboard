@@ -4,6 +4,7 @@
 # python packages required to run the dashboard
 pandas
 dash
+gunicorn
 plotly
 dash_mantine_components
 dash_bootstrap_components
