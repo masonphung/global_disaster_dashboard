@@ -723,9 +723,14 @@ def update_stat_cards(data):
     filtered_data['last_update'] = pd.to_datetime(filtered_data['last_update'], errors='coerce')
 
     # Calculate totals for the filtered data
-    total_deaths = filtered_data['total_deaths'].sum().astype(int)
-    total_affected = filtered_data['total_affected'].sum().astype(int)
-    total_damage = filtered_data['total_damage'].sum().astype(int)
+    total_deaths = filtered_data['total_deaths'].sum()
+    total_affected = filtered_data['total_affected'].sum()
+    total_damage = filtered_data['total_damage'].sum()
+
+    # Convert sums to integers if they are not None
+    total_deaths = int(total_deaths) if pd.notna(total_deaths) else 0
+    total_affected = int(total_affected) if pd.notna(total_affected) else 0
+    total_damage = int(total_damage) if pd.notna(total_damage) else 0
 
     # Get country with most affected
     most_affected_country = filtered_data.groupby('country')['total_affected'].sum().idxmax() if not filtered_data.empty else 'N/A'
