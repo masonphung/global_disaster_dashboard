@@ -12,25 +12,27 @@
 ### Last update
 - Full update logs: [Update log](/update_log.txt)
 
-### Repository Tree
-main/   
-├─ __pycache__/   
-│  ├─ new_file23   
-├─ assets/   
-│  ├─ images/   
-│  ├─ .DS_Store   
-│  ├─ bootstrap.css   
-├─ dataset/   
-│  ├─ .DS_Store   
-│  ├─ .gitignore   
-│  ├─ data_cleaning.py   
-│  ├─ dev_draft.ipynb   
-│  ├─ readme.md   
-│  ├─ requirements.txt   
-│  ├─ update_log.txt   
-│  ├─ utils.py   
-│  ├─ working_process.ipynb   
-├─ .gitignore   
-├─ package.json   
-├─ README.md   
+### Repository Tree  
+
+main/  
+├─ __pycache__/  
+│  ├─ new_file23  
+├─ assets/  
+│  ├─ images/  
+│  ├─ .DS_Store  
+│  ├─ bootstrap.css  
+├─ dataset/  
+│  ├─ .DS_Store  
+│  ├─ .gitignore  
+│  ├─ data_cleaning.py  
+│  ├─ dev_draft.ipynb  
+│  ├─ readme.md  
+│  ├─ requirements.txt  
+│  ├─ update_log.txt  
+│  ├─ utils.py  
+│  ├─ working_process.ipynb  
+├─ .gitignore  
+├─ package.json  
+├─ README.md  
+
 
