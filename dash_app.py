@@ -92,7 +92,14 @@ app.layout = html.Div([
                 # Filter 1: Year and Month (Year above Month)
                 dbc.Col([
                     html.Div([
-                        html.Label('Year'),
+                        html.Label([
+                            'Year ',
+                            html.Abbr(
+                                "\u003f\u20dd", 
+                                title='Pull both the slider bar to change the year period. If you want to select a single year, pull them together at the same place.',
+                                # style = {'textDecoration': "underline", 'cursor': "help"} 
+                            )
+                        ]),
                         dcc.RangeSlider(
                             # There is an developer's issue with dtype int64 (data['year'] dtype) with dcc.RangeSlider.
                             # We'll have to state the years manually in this part.
@@ -105,7 +112,14 @@ app.layout = html.Div([
                             tooltip={"placement": "bottom", "always_visible": True},
                             #className="form-range"
                         ),
-                        html.Label('Month'),
+                        html.Label([
+                            'Month ',
+                            html.Abbr(
+                                "\u003f\u20dd", 
+                                title='Select the preffered month for the filter. Multiple months can be selected.',
+                                # style = {'textDecoration': "underline", 'cursor': "help"} 
+                            )
+                        ]),
                         dcc.Dropdown(
                             id='month-dropdown',
                             options=[
@@ -121,46 +135,131 @@ app.layout = html.Div([
                                 {'label': 'October', 'value': 10},
                                 {'label': 'November', 'value': 11},
                                 {'label': 'December', 'value': 12}],
-                            placeholder='Select Month'
+                            placeholder='Select Month',
+                            multi=True
                         ),
                         dbc.Row([
                             html.Div([
                                 dbc.Button("Reset Filter", id="clear-filter"),
+                                dbc.Button("Dashboard Guide", id="open-modal"),
+                                dbc.Modal(
+                                    [
+                                        dbc.ModalHeader(dbc.ModalTitle("How to use the dashboard")),
+                                        dbc.ModalBody(
+                                            html.Div([
+                                                html.P(
+                                                    "There are 3 filters to help you view the data from different perspectives, including:",
+                                                    style={'marginBottom': '5px'}  # Reduced margin
+                                                ),
+                                                html.Ul(
+                                                    [
+                                                        html.Li("Time filter (year and month)"),
+                                                        html.Li("Geographical filter (Continent/Subregion/Countries)"),
+                                                        html.Li("Disaster filter (different types of disasters)"),
+                                                    ],
+                                                    style={'marginLeft': '20px', 'marginBottom': '5px'}  # Adjusted margin
+                                                ),
+                                                html.P(
+                                                    "To apply the filters to the dashboard, select your preferred attributes and choose the values you desire. Multiple values can be chosen in each filter.",
+                                                    style={'marginBottom': '5px'}  # Reduced margin
+                                                ),
+                                                html.P(
+                                                    "To reset the filters, press the 'Reset Filter' button.",
+                                                    style={'marginBottom': '5px'}  # Reduced margin
+                                                ),
+                                                html.P(
+                                                    "Point at the \u003f\u20dd icon to see hints and explanations related to the components/statistics.",
+                                                    style={'marginBottom': '5px'}  # Reduced margin
+                                                ),
+                                                html.P(
+                                                    "At each plot, hover over the graphs to see more information about the presenting data.",
+                                                    style={'marginBottom': '5px'}  # Reduced margin
+                                                ),
+                                                html.P(
+                                                    "Plotly offers useful interaction to play with the plots, which you can find in the hidden bar on the top right of each graph:",
+                                                    style={'marginBottom': '5px'}  # Reduced margin
+                                                ),
+                                                html.Ul(
+                                                    [
+                                                        html.Li("Click the 'Camera' icon to download the current plot as a picture."),
+                                                        html.Li("'Pan' icon helps navigate the content inside the plot."),
+                                                        html.Li("You can choose the data zone using the 'Box' or 'Lasso' select tool, which helps to filter the selected data."),
+                                                        html.Li("Zoom in and zoom out with '+' and '-' buttons."),
+                                                        html.Li("To reset the applied Plotly interaction, press the 'Reset' icon."),
+                                                    ],
+                                                    style={'marginLeft': '20px', 'marginBottom': '5px'}  # Adjusted margin
+                                                ),
+                                            ])
+                                        ),
+                                        dbc.ModalFooter(
+                                            dbc.Button(
+                                                "I got it!", id="close-modal", className="ms-auto", n_clicks=0
+                                            )
+                                        ),
+                                    ],
+                                    id="modal",
+                                    is_open=False,
+                                )
                                 # dbc.Button("Download as JPG", id='download-image') # Under development
                             ])
-                        ], style={'margin-top': '1vh'})
-                    ]),
-                ], className = ['vw-40', 'h-100', 'align-items-stretch'], 
+                        ])
+                    ], className = 'd-flex flex-column gap-1'),
+                ], className = ['h-100'], 
                 xs=12, sm=12, md=12, lg=4, xl=4),
                 # Filter 2: Location (Continent, Subregion, Country in vertical stack)
                 dbc.Col([
                     html.Div([
-                        html.Label('Continent'),
+                        html.Label([
+                            'Continent ',
+                            html.Abbr(
+                                "\u003f\u20dd", 
+                                title='Select the preffered continent for the filter. Multiple continents can be selected.',
+                            )
+                        ]),
                         dcc.Dropdown(
                             id='continent-dropdown',
                             options=[{'label': c, 'value': c} for c in continents],
                             placeholder='Select Continent',
                             multi=True
                         ),
-                        html.Label('Subregion'),
+                        html.Label([
+                            'Region ',
+                            html.Abbr(
+                                "\u003f\u20dd", 
+                                title='Select the preffered region in the selected continents. Multiple regions can be selected.',
+                            )
+                        ]),
                         dcc.Dropdown(
                             id='subregion-dropdown',
                             placeholder='Select Subregion',
                             multi=True
                         ),
-                        html.Label('Country'),
+                        html.Label([
+                            'Country ',
+                            html.Abbr(
+                                "\u003f\u20dd", 
+                                title='Select the preffered countries or type the country names for the filter. Country list is affected by selected continents & regions.',
+                            )
+                        ]),
                         dcc.Dropdown(
                             id='country-dropdown',
                             placeholder='Select Country',
                             multi=True
                         )
                         ]),  
-                ], className = ['vw-40', 'h-100'], 
+                ], className = ['h-100'], 
                 xs=12, sm=12, md=12, lg=3, xl=4),
                 # Filter 3: Disaster Type
                 dbc.Col([
                     html.Div([
-                        html.Label('Disaster Type'),
+                        html.Label([
+                            'Disaster type ',
+                            html.Abbr(
+                                "\u003f\u20dd",
+                                spellCheck = 'false',
+                                title='Select the preffered disaster types for the filter. Multiple disaster types can be selected.',
+                            )
+                        ], spellCheck = 'false'),
                         dcc.Checklist(
                             className="form-check",
                             id='disaster-type-checkbox',
@@ -240,9 +339,9 @@ app.layout = html.Div([
                             }
                         )
                     ])
-                ], className = ['vw-20', 'h-100'], 
+                ], className = ['h-100'], 
                 xs=12, sm=12, md=12, lg=5, xl=4)
-            ])],style = {'padding-bottom': '1vh', 'padding-left': '1vh'})], 
+            ])],style = {'padding': '0 0.5rem'}, className = 'justify-content-center')], 
             className = ['col', 'dflex', 'h-100'], 
             xs=12, sm=12, md=12, lg=10, xl=10  # Match with Col 1 of Row 1
         )
@@ -255,63 +354,78 @@ app.layout = html.Div([
             [
                 # Card 1: Total deaths
                 dbc.Card([
-                    dbc.CardHeader(
-                        'Total Casualty', 
-                        style={'textAlign': 'center'}
-                    ),
+                    dbc.CardHeader([                     
+                        'Total Casualty ', 
+                        html.Abbr(
+                            "\u003f\u20dd", 
+                            title='The number of fatalities (deceased and missing combined) during the period caused by the selected disasters.',
+                        ),
+                    ],style={'textAlign': 'center'}),
                     dbc.CardBody(
                         html.Div([
                             html.H3(id='total-deaths-card', style={'textAlign': 'center', 'alignItems': 'center'}),
                             # html.P("deaths", style={'textAlign': 'center', 'marginTop': '0.05vh', 'opacity': '0.75'})
                         ],className='card-stats-body')
                     )
-                ], className = 'stats-card mb-2 d-flex'),
+                ], className = 'stats-card d-flex'),
                 # Card 2: Total Affected
                 dbc.Card([
-                    dbc.CardHeader(
-                        'Total People Affected', 
-                        style={'textAlign': 'center'}
-                    ),
+                    dbc.CardHeader([                     
+                        'Total People Affected ', 
+                        html.Abbr(
+                            "\u003f\u20dd", 
+                            title='Including: 1. whom with physical injuries, trauma, or illness requiring immediate medical assistance due to the disasters; 2. whom required shelter due to their house being destroyed or heavily damaged during the disasters; 3. whom required immediate assistance due to the disasters.',
+                        ),
+                    ],style={'textAlign': 'center'}),
                     dbc.CardBody(
                         html.Div([
                             html.H3(id='total-affected-card', style={'textAlign': 'center', 'alignItems': 'center'}),
                             # html.P("people", style={'textAlign': 'center', 'marginTop': '0.05vh', 'opacity': '0.75'})
                         ],className='card-stats-body')
                     )
-                ], className = 'stats-card mb-2 d-flex'),
+                ], className = 'stats-card d-flex'),
                 # Card 3: Total Damage
                 dbc.Card([
-                    dbc.CardHeader(
-                        'Total Damage', 
-                        style={'textAlign': 'center'}
-                    ),
+                    dbc.CardHeader([                     
+                        'Total Damage ', 
+                        html.Abbr(
+                            "\u003f\u20dd", 
+                            title='The value of all economic losses directly or indirectly due to the disaster. Adjusted for inflation using the Consumer Price Index',
+                        ),
+                    ],style={'textAlign': 'center'}),
                     dbc.CardBody(
                         html.Div([
                             html.H3(id='total-damage-card', style={'textAlign': 'center', 'alignItems': 'center'}),
                             # html.P("US$", style={'textAlign': 'center', 'marginTop': '0.05vh', 'opacity': '0.75'})
-                        ],className='stats-card-stats-body')
+                        ],className='card-stats-body')
                     )
-                ], className = 'card mb-2 d-flex'),
+                ], className = 'stats-card d-flex'),
                 # Card 4: Country with most deaths
                 dbc.Card([
-                    dbc.CardHeader(
-                        'Highest Casualty', 
-                        style={'textAlign': 'center'}
-                    ),
+                    dbc.CardHeader([                     
+                        'Highest casualty ', 
+                        html.I(
+                            "\u003f\u20dd", 
+                            title='The country with the highest number of fatalities caused by the disasters.',
+                        ),
+                    ],style={'textAlign': 'center'}),
                     dbc.CardBody(
                         html.Div([
                             html.H3(id='most-deaths-country-card')],
                             style={'textAlign': 'center', 'alignItems': 'center'},
-                            className=('stats-card-stats-body')
+                            className=('card-stats-body')
                         )
                     )
-                ], className = 'card mb-2 d-flex'),
+                ], className = 'stats-card d-flex'),
                 # Card 5: Most affected country
                 dbc.Card([
-                    dbc.CardHeader(
-                        'Most People Affected', 
-                        style={'textAlign': 'center'}
-                    ),
+                    dbc.CardHeader([                     
+                        'Most People Affected ', 
+                        html.Abbr(
+                            "\u003f\u20dd", 
+                            title='The country with the highest number of people affected by the disasters.',
+                        ),
+                    ],style={'textAlign': 'center'}),
                     dbc.CardBody(
                         html.Div(
                             [html.H3(id='most-affected-country-card')], 
@@ -319,30 +433,35 @@ app.layout = html.Div([
                             className='card-stats-body'
                         )
                     )
-                ], className = 'stats-card mb-2 d-flex'),
+                ], className = 'stats-card d-flex'),
                 # Card 6: Most damaged country
                 dbc.Card([
-                    dbc.CardHeader(
-                        'Highest Damaged', 
-                        style={'textAlign': 'center'}
-                    ),
+                    dbc.CardHeader([                     
+                        'Highest Damaged ', 
+                        html.Abbr(
+                            "\u003f\u20dd", 
+                            title='The country suffered the highest economical losses caused by the disasters.',
+                        ),
+                    ],style={'textAlign': 'center'}),
                     dbc.CardBody(
-                        html.Div([
-                            html.H3(id='most-damaged-country-card')],
+                        html.Div(
+                            [html.H3(id='most-damaged-country-card')],
                             style={'textAlign': 'center', 'alignItems': 'center'},
                             className='card-stats-body'
                         )
                     )
-                ], className = 'stats-card mb-2 d-flex'),
+                ], className = 'stats-card d-flex'),
             ],
-            className=['d-flex','flex-column', 'vh-75'],
+            className=['d-flex','flex-column', 'gap-2'],
             xs=12, sm=12, md=12, lg=12, xl=2 # Match with other Cols of Row 2
         ),
         # Col 2 of Row 2: Two maps
         dbc.Col(
             [
                 dbc.Card([
-                    dbc.CardHeader(id='damage-map-header'),
+                    dbc.CardHeader(             
+                        id='damage-map-header', 
+                    ),
                     dbc.CardBody(
                         html.Div([
                             dcc.Graph(
@@ -354,7 +473,7 @@ app.layout = html.Div([
                             dcc.Tooltip(id='damage-map-tooltip', border_color = '#4C230A')
                         ], className = 'h-100')
                     )
-                    ], className = 'map-card mb-2 flex-fill d-flex flex-column'
+                    ], className = 'map-card flex-fill d-flex flex-column h-50'
                 ),
                 dbc.Card([
                     dbc.CardHeader(id='disaster-count-map-header'),
@@ -369,10 +488,10 @@ app.layout = html.Div([
                             dcc.Tooltip(id='disaster-count-map-tooltip', border_color = '#4C230A')
                         ], className = 'h-100')
                     ),
-                    ], className = 'map-card mb-2 flex-fill d-flex flex-column'
+                    ], className = 'map-card flex-fill d-flex flex-column h-50'
                 ),
             ], 
-            className=['d-flex','flex-column', 'vh-75'],  
+            className=['d-flex','flex-column', 'gap-2'],  
             xs=12, sm=12, md=12, lg=12, xl=5  # Match with other Cols of Row 2
         ),
         # Col 3 of Row 2: Two right charts
@@ -391,7 +510,7 @@ app.layout = html.Div([
                             dcc.Tooltip(id='stacked-bar-chart-tooltip', border_color = '#4C230A')
                         ], className = 'h-100')
                     ),
-                    ], className = 'map-card mb-2 flex-fill d-flex flex-column'
+                    ], className = 'map-card flex-fill d-flex flex-column h-50'
                 ),
                 dbc.Card([
                     dbc.CardHeader(id='casualty-trend-header'),
@@ -405,10 +524,10 @@ app.layout = html.Div([
                             dcc.Tooltip(id='casualty-trend-tooltip', border_color = '#4C230A')
                     ], className = 'h-100')
                     )
-                    ], className = 'map-card mb-2 flex-fill d-flex flex-column'
+                    ], className = 'map-card flex-fill d-flex flex-column h-50'
                 )
             ], 
-            className=['d-flex','flex-column', 'vh-75'],  
+            className=['d-flex','flex-column', 'gap-2'],  
             xs=12, sm=12, md=12, lg=12, xl=5  # Match with other Cols of Row 2
         ),
     ], style = {'margin-top': '1vh'}, className = ['row', 'vh-75']), # Match with Row 1 classes
@@ -453,9 +572,11 @@ def store_data(selected_continent, selected_subregion, selected_country, selecte
     if selected_year:
         mask &= (filtered_data['year'] >= str(selected_year[0])) & (filtered_data['year'] <= str(selected_year[1]))
 
-    # Apply month filter
-    if selected_month:
-        mask &= (filtered_data['month'] == int(selected_month))
+    # Apply month filter (allow multiple)
+    if selected_month and isinstance(selected_month, list):
+        filtered_data['month'] = filtered_data['month'].astype(int)
+        mask &= filtered_data['month'].isin(selected_month)
+
 
     # Apply disaster type filter (allow multiple)
     if selected_disaster_type and isinstance(selected_disaster_type, list):
@@ -537,7 +658,7 @@ def genearate_card_name(selected_continent, selected_subregion, selected_country
     
     return damage_header, disaster_count_damage_header, stacked_bar_chart_header, casualty_trend_header
     
-# Reset filter button
+# Button 1: Reset filters
 @app.callback(
     [Output('continent-dropdown', 'value'),
     Output('subregion-dropdown', 'value'),
@@ -557,6 +678,18 @@ def reset_filters(n_clicks):
         None,          # Reset month dropdown to None or default value
         disaster_types # Reset disaster type checklist to the original list
     )
+
+# Button 2: Dashboard uide
+@app.callback(
+    Output("modal", "is_open"),
+    [Input("open-modal", "n_clicks"), Input("close-modal", "n_clicks")],
+    [State("modal", "is_open")],
+)
+def toggle_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
+
 
 # Stats: Update all the statistics cards
 @app.callback(
@@ -594,7 +727,7 @@ def update_stat_cards(data):
     # Format the values with commas for better readability
     total_deaths_str = f"{total_deaths:,}"
     total_affected_str = f"{total_affected:,}"
-    total_damage_str = f"{total_damage:,}"
+    total_damage_str = f"{total_damage:,} US$"
     last_updated_str = f"Last update: {last_updated.strftime('%Y-%m-%d')}" if last_updated != 'N/A' else "Last update: N/A"
 
     return (total_deaths_str, total_affected_str, total_damage_str,
