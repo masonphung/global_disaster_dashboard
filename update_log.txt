@@ -29,8 +29,16 @@
 * 2023/10/17: (Duc)
     - Enhance theme: coloring, card shadow, font and content centering
 
-* 2023/10/18: (Duc + Mason)
-    - Enhance theme: Fixing bugs, improve theme appearance
-    - ALPHA UPLOAD
+* 2023/10/18:
+    Mason
+        - Enhance theme: Fixing bugs, improve theme appearance
+    Duc
+        - ALPHA UPLOAD
 
-
+* 2023/10/19:
+    Mason
+        - BETA UPLOAD: Further enhance automatic sizing, fit better for laptop monitor, fix bugs
+        - Add dashboard tutorial features with modal, abbr
+        - Web deploy at https://macquarie-dataviz24-sdg-dashboard.onrender.com/
+    Viet Anh
+        - Project documetation: add repo tree, project description, enhance readme

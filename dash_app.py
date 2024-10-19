@@ -62,11 +62,21 @@ app = dash.Dash(
     __name__, 
     # Apply external bootstrap theme
     external_stylesheets=[dbc.themes.BOOTSTRAP],
-    # For image download
-    #external_scripts=[{'src': 'https://cdn.jsdelivr.net/npm/dom-to-image@2.6.0/dist/dom-to-image.min.js'}],
     # Tweaks meta tags for a better compatibility with devices
-    meta_tags=[{'name': 'viewport', 'content': 'width=device-width, initial-scale=1.0, maximum-scale=1.2, minimum-scale=0.5'}]
+    meta_tags=[
+        {'name': 'viewport', 'content': 'width=device-width, initial-scale=1.0, maximum-scale=1.2, minimum-scale=0.5'},
+        {"name": "description", "content": "A dash Dashboard app provides global insights about natural disasters."},
+        {"property": "og:title", "content": "Global Disaster Statistics Dashboard"},
+        {"property": "og:description", "content": "Explore global natural disasters and their economic impacts through interactive visuals"},
+        {"property": "og:image", "content": "-"},
+        {"property": "og:type", "content": "website"},
+        {"name": "twitter:card", "content": "summary_large_image"},
+        {"name": "twitter:title", "content": "Global Disaster Statistics Dashboard"},
+        {"name": "twitter:description", "content": "Explore global natural disasters and their economic impacts through interactive visuals"},
+        {"name": "twitter:image", "content": "-"},
+    ]
 )
+#app.title = "Global Disaster Statistics - DataViz 2024"
 server = app.server
 
 # Layout of the dashboard: Consists of 2 rows.
@@ -148,7 +158,7 @@ app.layout = html.Div([
                                         dbc.ModalBody(
                                             html.Div([
                                                 html.P(
-                                                    "There are 3 filters to help you view the data from different perspectives, including:",
+                                                    "Welcome to Team A's Global Disaster Statistics Dashboard! There are 3 filters to help you view the data from different perspectives, including:",
                                                     style={'marginBottom': '5px'}  # Reduced margin
                                                 ),
                                                 html.Ul(
@@ -188,6 +198,10 @@ app.layout = html.Div([
                                                         html.Li("To reset the applied Plotly interaction, press the 'Reset' icon."),
                                                     ],
                                                     style={'marginLeft': '20px', 'marginBottom': '5px'}  # Adjusted margin
+                                                ),
+                                                html.P(
+                                                    "The dashboard was initially made for Macquarie DataViz challenge 2024 entry by Team A: @Mason, @Erik, @Anh Duc @Viet Anh. Feel free to contact us for discussions and let us know if we can improve anything: pphungwork@gmail.com (Mason).",
+                                                    style={'marginBottom': '5px'}  # Reduced margin
                                                 ),
                                             ])
                                         ),
@@ -727,7 +741,7 @@ def update_stat_cards(data):
     total_deaths_str = f"{total_deaths:,}"
     total_affected_str = f"{total_affected:,}"
     total_damage_str = f"{total_damage:,} US$"
-    last_updated_str = f"Last update: {last_updated.strftime('%Y-%m-%d')}" if last_updated != 'N/A' else "Last update: N/A"
+    last_updated_str = f"Data last update: {last_updated.strftime('%Y-%m-%d')}" if last_updated != 'N/A' else "Last update: N/A"
 
     return (total_deaths_str, total_affected_str, total_damage_str,
             most_deaths_country, most_affected_country, most_damaged_country, last_updated_str)

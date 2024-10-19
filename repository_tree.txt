@@ -1,0 +1,16 @@
+├─ assets/
+│  ├─ images/
+│  ├─ bootstrap.css
+├─ dataset/
+│  ├─ backups/
+│  │  └─ ...
+│  └─ cleaned_emrat.xlsx 
+├─ .gitignore
+├─ dash_app.py
+├─ data_cleaning.py
+├─ project-description.ipynb
+├─ readme.md
+├─ requirements.txt
+├─ update_log.txt
+├─ utils.py
+└─ working_process.ipynb
