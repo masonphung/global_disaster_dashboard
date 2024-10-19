@@ -116,7 +116,7 @@ app.layout = html.Div([
                             'Month ',
                             html.Abbr(
                                 "\u003f\u20dd", 
-                                title='Select the preffered month for the filter. Multiple months can be selected.',
+                                title='Select the preferred month for the filter. Multiple months can be selected.',
                                 # style = {'textDecoration': "underline", 'cursor': "help"} 
                             )
                         ]),
@@ -154,7 +154,7 @@ app.layout = html.Div([
                                                 html.Ul(
                                                     [
                                                         html.Li("Time filter (year and month)"),
-                                                        html.Li("Geographical filter (Continent/Subregion/Countries)"),
+                                                        html.Li("Geographical filter (Continent/Subregion/Country)"),
                                                         html.Li("Disaster filter (different types of disasters)"),
                                                     ],
                                                     style={'marginLeft': '20px', 'marginBottom': '5px'}  # Adjusted margin
@@ -172,7 +172,7 @@ app.layout = html.Div([
                                                     style={'marginBottom': '5px'}  # Reduced margin
                                                 ),
                                                 html.P(
-                                                    "At each plot, hover over the graphs to see more information about the presenting data.",
+                                                    "At each plot, hover on data points on the graphs to see detailed information about the presenting data.",
                                                     style={'marginBottom': '5px'}  # Reduced margin
                                                 ),
                                                 html.P(
@@ -213,7 +213,7 @@ app.layout = html.Div([
                             'Continent ',
                             html.Abbr(
                                 "\u003f\u20dd", 
-                                title='Select the preffered continent for the filter. Multiple continents can be selected.',
+                                title='Select the preferred continent for the filter. Multiple continents can be selected.',
                             )
                         ]),
                         dcc.Dropdown(
@@ -226,7 +226,7 @@ app.layout = html.Div([
                             'Region ',
                             html.Abbr(
                                 "\u003f\u20dd", 
-                                title='Select the preffered region in the selected continents. Multiple regions can be selected.',
+                                title='Select the preferred region in the selected continents. Multiple regions can be selected.',
                             )
                         ]),
                         dcc.Dropdown(
@@ -238,7 +238,7 @@ app.layout = html.Div([
                             'Country ',
                             html.Abbr(
                                 "\u003f\u20dd", 
-                                title='Select the preffered countries or type the country names for the filter. Country list is affected by selected continents & regions.',
+                                title='Select the preferred countries or type the country names for the filter. Country list is affected by selected continents & regions.',
                             )
                         ]),
                         dcc.Dropdown(
@@ -257,7 +257,7 @@ app.layout = html.Div([
                             html.Abbr(
                                 "\u003f\u20dd",
                                 spellCheck = 'false',
-                                title='Select the preffered disaster types for the filter. Multiple disaster types can be selected.',
+                                title='Select the preferred disaster types for the filter. Multiple disaster types can be selected.',
                             )
                         ], spellCheck = 'false'),
                         dcc.Checklist(
@@ -503,8 +503,7 @@ app.layout = html.Div([
                         html.Div([
                             dcc.Graph(
                                 id='stacked-bar-chart', 
-                                style={'height': '100%'}, 
-                                className='overflow-y-scroll',
+                                style={'height': '100%'},
                                 clear_on_unhover=True
                             ),
                             dcc.Tooltip(id='stacked-bar-chart-tooltip', border_color = '#4C230A')
@@ -644,17 +643,17 @@ def update_countries(selected_continent, selected_subregion):
 
 def genearate_card_name(selected_continent, selected_subregion, selected_country, selected_year, selected_month, selected_disaster_type):
     # Update the plot card header name for each card (Total of 4 cards)
-    base_header = "Total damage inflicted by "
-    damage_header = generate_header(base_header, selected_disaster_type, selected_year, selected_month)
+    MapA_base_header = "Total damage (in US$) inflicted by "
+    damage_header = generate_header(MapA_base_header, selected_disaster_type, selected_year, selected_month)
     
-    base_header = "Total number of "
-    disaster_count_damage_header = generate_header(base_header, selected_disaster_type, selected_year, selected_month)
+    MapB_base_header = "Total number of "
+    disaster_count_damage_header = generate_header(MapB_base_header, selected_disaster_type, selected_year, selected_month)
     
-    base_header = "Trends of "
-    stacked_bar_chart_header = generate_header(base_header, selected_disaster_type, selected_year, selected_month)
+    Bar_base_header = "Trends of "
+    stacked_bar_chart_header = generate_header(Bar_base_header, selected_disaster_type, selected_year, selected_month)
 
-    base_header = "Number of deaths by time from "
-    casualty_trend_header = generate_header(base_header, selected_disaster_type, selected_year, selected_month)
+    Line_base_header = "Number of deaths by time from "
+    casualty_trend_header = generate_header(Line_base_header, selected_disaster_type, selected_year, selected_month)
     
     return damage_header, disaster_count_damage_header, stacked_bar_chart_header, casualty_trend_header
     
@@ -793,15 +792,8 @@ def mapA_damage_choropleth(data):
 
     # Sort the DataFrame by 'damage_category' to ensure correct plotting order
     filtered_data.sort_values('damage_category', inplace=True)
-
-    # Explicit color mapping to ensure the correct order of categories
-#    category_colors = {
-#        '0 - 1M': '#fee5d9',
-#        '1M - 10M': '#fcae91',
-#        '10M - 100M': '#fb6a4a',
-#        '100M - 500M': '#de2d26',
-#        '> 500M': '#a50f15'
-#    }
+    
+    # Assign color for each category
     category_color = {labels[i]: map_color[i] for i in range(len(labels))}
 
     # Create choropleth map for total damage categorized
@@ -812,7 +804,7 @@ def mapA_damage_choropleth(data):
         color='damage_category',  # Use the 'damage_category' column for color
         color_discrete_map=category_color,  # Use explicit color mapping
         hover_name='country',  # Country name shown on hover
-        custom_data=['damage_by_country'],  # Add damage category to custom data
+        custom_data=['damage_by_country','damage_category'],  # Add damage category to custom data
         category_orders={'damage_category': labels}  # Force the correct legend order
     )
     
@@ -870,14 +862,13 @@ def mapA_hover(hover_data, selected_year, selected_disaster_type):
 
     # Extract the damage category directly from hover data
     damage = pt.get('customdata', [None])[0]  # Adjust based on your hover data structure
-
     fmt_damage = format_value(damage)
     
     # Create tooltip content
     children = html.Div([
         html.H5(f"{country_name}", style={'margin': '0', 'textAlign': 'left'}),
-        html.P(year_display, style={'margin': '0', 'textAlign': 'left', 'font-size': '1vh'}, className = 'text-muted b'),
-        html.P(f"Total damage: {fmt_damage}", style={'margin': '0', 'textAlign': 'left', 'font-size': '1vh'}, className = 'b'),
+        html.H6(year_display, style={'margin': '0', 'textAlign': 'left'}, className = 'text-muted b'),
+        html.P(f"Total damage suffered: {fmt_damage} US$", style={'margin': '0', 'textAlign': 'left'}, className = 'b'),
     ])
 
     return True, bbox, children
@@ -944,10 +935,6 @@ def mapB_disaster_count_choropleth(data):
             'disaster_category': pd.Categorical(list(missing_categories), categories=labels, ordered=True)
         })
         disaster_count_filtered = pd.concat([disaster_count_filtered, missing_df], ignore_index=True)
-
-    # Explicit color mapping to ensure the correct order of categories
-    color_list = ['#fee5d9','#fcae91','#fb6a4a','#de2d26','#a50f15']
-    category_colors = {label: color for label, color in zip(labels, color_list)}
     
     # Sort the DataFrame by the disaster category to ensure plotting order
     disaster_count_filtered.sort_values('disaster_category', inplace=True)
@@ -1030,8 +1017,8 @@ def mapB_hover(hover_data, selected_year, selected_disaster_type):
     # Create tooltip content
     children = html.Div([
         html.H5(f"{country_name}", style={'margin': '0', 'textAlign': 'left'}),
-        html.P(year_display, style={'margin': '0', 'textAlign': 'left', 'font-size': '1vh'}, className = 'text-muted b'),
-        html.P(f"Number of disasters: {count}", style={'margin': '0', 'textAlign': 'left', 'font-size': '1vh'}, className = 'b'),
+        html.H6(year_display, style={'margin': '0', 'textAlign': 'left'}, className = 'text-muted b'),
+        html.P(f"Number of disasters: {count}", style={'margin': '0', 'textAlign': 'left'}, className = 'b'),
     ])
 
     return True, bbox, children
@@ -1127,8 +1114,8 @@ def bar_hover(hover_data, selected_year, selected_disaster_type):
     # Create tooltip content
     children = html.Div([
         html.H5(f"{disaster_type}", style={'margin': '0', 'textAlign': 'left', 'color': type_color}),
-        html.P(year_display, style={'margin': '0', 'textAlign': 'left', 'font-size': '1vh'}, className = 'text-muted b'),
-        html.P(f"{disaster_count} occurences", style={'margin': '0', 'textAlign': 'left', 'font-size': '1vh'}, className = 'b'),
+        html.H6(year_display, style={'margin': '0', 'textAlign': 'left'}, className = 'text-muted b'),
+        html.P(f"{disaster_count} occurences", style={'margin': '0', 'textAlign': 'left'}, className = 'b'),
     ])
 
     return True, bbox, children
@@ -1204,21 +1191,14 @@ def line_hover(hover_data, selected_disaster_type):
     bbox = pt["bbox"]  # This should already have the correct structure
     
     # Extract country name from the hover data
-    disaster_type = pt.get('customdata', [None])[0]
     total_deaths = pt['y']
     year = pt['x']
     
-    disaster_colors = {
-        'Drought': '#4C230A', 'Extreme temperature': '#E34B48', 'Volcanic activity': '#0D160B', 'Wildfire': 'orange', 
-        'Earthquake': '#555B6E', 'Mass movement': '#84B59F', 'Flood': '#568EA3', 'Storm' : '#BBE5ED'
-    }
-    
-    type_color = disaster_colors.get(disaster_type, 'black')  # Default to 'black' if type is not found
        
     # Create tooltip content
     children = html.Div([
         html.H5(year, style={'margin': '0', 'textAlign': 'left'}),
-        html.P(f"Total deaths: {format_value(total_deaths)}", style={'margin': '0', 'textAlign': 'left', 'font-size': '1vh'}, className = 'b'),
+        html.P(f"Total deaths: {format_value(total_deaths)}", style={'margin': '0', 'textAlign': 'left'}, className = 'b'),
     ])
 
     return True, bbox, children
