@@ -1083,7 +1083,7 @@ def plot_bar_total_disaster(data):
             orientation='h',
             #yanchor="middle",
             y=-0.25,
-            #xanchor="right",
+            #xanchor="center",
             #x=0.5,
             title=None
         )

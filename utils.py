@@ -11,13 +11,12 @@ def generate_header(header_text, selected_disasters, selected_year, selected_mon
     - base_header_text (str): The base text for the header.
     - selected_disasters (list): A list of selected disaster types.
     - selected_year (int or list): The selected year or a range of years as a list.
-    - selected_month (int): The selected month as a number (1-12).
+    - selected_month (int or list): The selected month(s) as a number or a list (1-12).
 
     Returns:
         str: A formatted header string reflecting the selections appended to the base text.
     """
-
-    # Disaster names logic
+    # Disaster names
     if len(selected_disasters) == 1:
         header_text += f"{selected_disasters[0]}"
     elif len(selected_disasters) == 2:
@@ -25,7 +24,7 @@ def generate_header(header_text, selected_disasters, selected_year, selected_mon
     else:
         header_text += "disasters"
 
-    # Year or range of years logic
+    # Year or range of years 
     if isinstance(selected_year, list):  # If it's a year range
         if selected_year[0] != selected_year[1]:
             header_text += f", {selected_year[0]} to {selected_year[1]}"
@@ -34,7 +33,7 @@ def generate_header(header_text, selected_disasters, selected_year, selected_mon
     elif selected_year is not None:
         header_text += f" in {selected_year}"
     
-    # Month logic
+    # Month
     month_map = {
         1: "January",
         2: "February",
@@ -50,12 +49,36 @@ def generate_header(header_text, selected_disasters, selected_year, selected_mon
         12: "December"
     }
     if selected_month:
-        header_text += f" in {month_map[selected_month]}"
+        if isinstance(selected_month, list):  # Handle multiple selected months
+            if len(selected_month) == 1:
+                header_text += f", in {month_map[selected_month[0]]}"
+            elif len(selected_month) == 2:
+                header_text += f", in {month_map[selected_month[0]]} and {month_map[selected_month[1]]}"
+            else:
+                header_text += ", in selected months"
+        else:
+            header_text += f", in {month_map[selected_month]}"
 
     return header_text
 
+
+
 # Change the int value into a shorter format
 def format_value(value):
+    """
+    Format numerical values with appropriate suffixes (K for thousands, M for millions, B for billions).
+
+    Parameters:
+    - value (float or int): The numerical value to be formatted.
+
+    Returns:
+    - str: A string representing the formatted value with suffixes. 
+           If the value is less than 1,000, it returns the number without a suffix.
+           For values in the thousands, it appends 'K' (e.g., 1,500 becomes '1.5K').
+           For values in the millions, it appends 'M' (e.g., 1,200,000 becomes '1.2M').
+           For values in the billions, it appends 'B' (e.g., 1,500,000,000 becomes '1.5B').
+           If the value is None, it returns 'N/A'.
+    """
     if value is None:
         return "N/A"
     elif value < 1_000:
