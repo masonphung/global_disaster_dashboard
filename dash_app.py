@@ -76,7 +76,7 @@ app = dash.Dash(
         {"name": "twitter:image", "content": "https://github.com/masonphung/macquarie_dataviz24/blob/32838a92ff7583c372270ebe77f4f98f6bc9108c/assets/images/dashboard_cap.png"},
     ]
 )
-#app.title = "Global Disaster Statistics - DataViz 2024"
+app.title = "Global Disaster Statistics - DataViz 2024"
 server = app.server
 
 # Layout of the dashboard: Consists of 2 rows.
