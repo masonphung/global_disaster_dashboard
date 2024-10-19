@@ -140,7 +140,7 @@ app.layout = html.Div([
                         ),
                         dbc.Row([
                             html.Div([
-                                dbc.Button("Reset Filter", id="clear-filter"),
+                                dbc.Button("Reset Filter", id="clear-filter", style = {'margin-right': '0.5vw'}),
                                 dbc.Button("Dashboard Guide", id="open-modal"),
                                 dbc.Modal(
                                     [
@@ -1077,14 +1077,13 @@ def plot_bar_total_disaster(data):
         ),
         yaxis_title='Total Disasters',
         plot_bgcolor='white',
-        margin=dict(l=40, r=40, t=0, b=10),
+        margin=dict(l=40, r=40, t=10, b=10),
         legend=dict(
             orientation='h',
-            itemsizing='constant',
-            yanchor="bottom",
-            y=-0.3,
-            xanchor="center",
-            x=0.5,
+            #yanchor="middle",
+            y=-0.25,
+            #xanchor="right",
+            #x=0.5,
             title=None
         )
     )
