@@ -68,12 +68,12 @@ app = dash.Dash(
         {"name": "description", "content": "A dash Dashboard app provides global insights about natural disasters."},
         {"property": "og:title", "content": "Global Disaster Statistics Dashboard"},
         {"property": "og:description", "content": "Explore global natural disasters and their economic impacts through interactive visuals"},
-        {"property": "og:image", "content": "-"},
+        {"property": "og:image", "content": "https://github.com/masonphung/macquarie_dataviz24/blob/32838a92ff7583c372270ebe77f4f98f6bc9108c/assets/images/dashboard_cap.png"},
         {"property": "og:type", "content": "website"},
         {"name": "twitter:card", "content": "summary_large_image"},
         {"name": "twitter:title", "content": "Global Disaster Statistics Dashboard"},
         {"name": "twitter:description", "content": "Explore global natural disasters and their economic impacts through interactive visuals"},
-        {"name": "twitter:image", "content": "-"},
+        {"name": "twitter:image", "content": "https://github.com/masonphung/macquarie_dataviz24/blob/32838a92ff7583c372270ebe77f4f98f6bc9108c/assets/images/dashboard_cap.png"},
     ]
 )
 #app.title = "Global Disaster Statistics - DataViz 2024"
