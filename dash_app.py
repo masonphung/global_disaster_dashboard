@@ -1,5 +1,5 @@
 import dash
-from dash import dcc, html, no_update
+from dash import dcc, html, no_update # clientside_callback
 from dash.dependencies import Input, Output, State
 import dash_mantine_components as dmc
 import dash_bootstrap_components as dbc
@@ -62,6 +62,8 @@ app = dash.Dash(
     __name__, 
     # Apply external bootstrap theme
     external_stylesheets=[dbc.themes.BOOTSTRAP],
+    # For image download
+    #external_scripts=[{'src': 'https://cdn.jsdelivr.net/npm/dom-to-image@2.6.0/dist/dom-to-image.min.js'}],
     # Tweaks meta tags for a better compatibility with devices
     meta_tags=[{'name': 'viewport', 'content': 'width=device-width, initial-scale=1.0, maximum-scale=1.2, minimum-scale=0.5'}]
 )
@@ -121,9 +123,14 @@ app.layout = html.Div([
                                 {'label': 'December', 'value': 12}],
                             placeholder='Select Month'
                         ),
-                        dbc.Button("Reset Filter", id="clear-filter", style={'margin-top': '1vh'})
+                        dbc.Row([
+                            html.Div([
+                                dbc.Button("Reset Filter", id="clear-filter"),
+                                # dbc.Button("Download as JPG", id='download-image') # Under development
+                            ])
+                        ], style={'margin-top': '1vh'})
                     ]),
-                ], className = ['vw-40'], 
+                ], className = ['vw-40', 'h-100', 'align-items-stretch'], 
                 xs=12, sm=12, md=12, lg=4, xl=4),
                 # Filter 2: Location (Continent, Subregion, Country in vertical stack)
                 dbc.Col([
@@ -148,7 +155,7 @@ app.layout = html.Div([
                             multi=True
                         )
                         ]),  
-                ], className = ['vw-40'], 
+                ], className = ['vw-40', 'h-100'], 
                 xs=12, sm=12, md=12, lg=3, xl=4),
                 # Filter 3: Disaster Type
                 dbc.Col([
@@ -228,13 +235,15 @@ app.layout = html.Div([
                             style={
                                 'display': 'flex', 'flexDirection': 'row', 
                                 'flexWrap': 'wrap', 'display':'grid',
-                                'gridTemplateColumns': 'repeat(2, 1fr)', 'gap': '5px'}
+                                'gridTemplateColumns': 'repeat(2, 1fr)', 'gap': '5px',
+                                'text-overflow': 'ellipsis', 'overflow': 'hidden', 'white-space': 'nowrap'
+                            }
                         )
                     ])
-                ], className = ['vw-20'], 
+                ], className = ['vw-20', 'h-100'], 
                 xs=12, sm=12, md=12, lg=5, xl=4)
-            ])],style = {'padding-bottom': '1vh'})], 
-            className = ['col', 'dflex'], 
+            ])],style = {'padding-bottom': '1vh', 'padding-left': '1vh'})], 
+            className = ['col', 'dflex', 'h-100'], 
             xs=12, sm=12, md=12, lg=10, xl=10  # Match with Col 1 of Row 1
         )
     ], className=['row', 'vh-25']),  # Match with Row 2 classes
@@ -253,10 +262,10 @@ app.layout = html.Div([
                     dbc.CardBody(
                         html.Div([
                             html.H3(id='total-deaths-card', style={'textAlign': 'center', 'alignItems': 'center'}),
-                            html.P("deaths", style={'textAlign': 'center', 'marginTop': '10px', 'opacity': '0.75'})
+                            # html.P("deaths", style={'textAlign': 'center', 'marginTop': '0.05vh', 'opacity': '0.75'})
                         ],className='card-stats-body')
                     )
-                ], className = 'h-100 mb-2'),
+                ], className = 'stats-card mb-2 d-flex'),
                 # Card 2: Total Affected
                 dbc.Card([
                     dbc.CardHeader(
@@ -266,10 +275,10 @@ app.layout = html.Div([
                     dbc.CardBody(
                         html.Div([
                             html.H3(id='total-affected-card', style={'textAlign': 'center', 'alignItems': 'center'}),
-                            html.P("people", style={'textAlign': 'center', 'marginTop': '10px', 'opacity': '0.75'})
+                            # html.P("people", style={'textAlign': 'center', 'marginTop': '0.05vh', 'opacity': '0.75'})
                         ],className='card-stats-body')
                     )
-                ], className = 'h-100 mb-2'),
+                ], className = 'stats-card mb-2 d-flex'),
                 # Card 3: Total Damage
                 dbc.Card([
                     dbc.CardHeader(
@@ -279,28 +288,28 @@ app.layout = html.Div([
                     dbc.CardBody(
                         html.Div([
                             html.H3(id='total-damage-card', style={'textAlign': 'center', 'alignItems': 'center'}),
-                            html.P("US$", style={'textAlign': 'center', 'marginTop': '10px', 'opacity': '0.75'})
-                        ],className='card-stats-body')
+                            # html.P("US$", style={'textAlign': 'center', 'marginTop': '0.05vh', 'opacity': '0.75'})
+                        ],className='stats-card-stats-body')
                     )
-                ], className = 'h-100 mb-2'),
+                ], className = 'card mb-2 d-flex'),
                 # Card 4: Country with most deaths
                 dbc.Card([
                     dbc.CardHeader(
-                        'Country with the Highest Casualty', 
+                        'Highest Casualty', 
                         style={'textAlign': 'center'}
                     ),
                     dbc.CardBody(
                         html.Div([
                             html.H3(id='most-deaths-country-card')],
                             style={'textAlign': 'center', 'alignItems': 'center'},
-                            className=('card-stats-body')
+                            className=('stats-card-stats-body')
                         )
                     )
-                ], className = 'h-100 mb-2'),
+                ], className = 'card mb-2 d-flex'),
                 # Card 5: Most affected country
                 dbc.Card([
                     dbc.CardHeader(
-                        'Country with the Most People Affected', 
+                        'Most People Affected', 
                         style={'textAlign': 'center'}
                     ),
                     dbc.CardBody(
@@ -310,11 +319,11 @@ app.layout = html.Div([
                             className='card-stats-body'
                         )
                     )
-                ], className = 'h-100 mb-2'),
+                ], className = 'stats-card mb-2 d-flex'),
                 # Card 6: Most damaged country
                 dbc.Card([
                     dbc.CardHeader(
-                        'Country with the Highest Damage', 
+                        'Highest Damaged', 
                         style={'textAlign': 'center'}
                     ),
                     dbc.CardBody(
@@ -324,9 +333,9 @@ app.layout = html.Div([
                             className='card-stats-body'
                         )
                     )
-                ], className = 'h-100 mb-2'),
+                ], className = 'stats-card mb-2 d-flex'),
             ],
-            className=['col','d-flex','flex-column', 'vh-100'],
+            className=['d-flex','flex-column', 'vh-75'],
             xs=12, sm=12, md=12, lg=12, xl=2 # Match with other Cols of Row 2
         ),
         # Col 2 of Row 2: Two maps
@@ -343,9 +352,9 @@ app.layout = html.Div([
                                 clear_on_unhover=True
                             ),
                             dcc.Tooltip(id='damage-map-tooltip', border_color = '#4C230A')
-                        ], style={'height': '100%'})
+                        ], className = 'h-100')
                     )
-                    ], className = 'card mb-2 h-100'
+                    ], className = 'map-card mb-2 flex-fill d-flex flex-column'
                 ),
                 dbc.Card([
                     dbc.CardHeader(id='disaster-count-map-header'),
@@ -358,12 +367,12 @@ app.layout = html.Div([
                                 clear_on_unhover=True
                             ),
                             dcc.Tooltip(id='disaster-count-map-tooltip', border_color = '#4C230A')
-                        ], style={'height': '100%'})
+                        ], className = 'h-100')
                     ),
-                    ], className = 'card mb-2 h-100'
+                    ], className = 'map-card mb-2 flex-fill d-flex flex-column'
                 ),
             ], 
-            className=['col','d-flex','flex-column', 'vh-100'],  
+            className=['d-flex','flex-column', 'vh-75'],  
             xs=12, sm=12, md=12, lg=12, xl=5  # Match with other Cols of Row 2
         ),
         # Col 3 of Row 2: Two right charts
@@ -376,12 +385,13 @@ app.layout = html.Div([
                             dcc.Graph(
                                 id='stacked-bar-chart', 
                                 style={'height': '100%'}, 
+                                className='overflow-y-scroll',
                                 clear_on_unhover=True
                             ),
                             dcc.Tooltip(id='stacked-bar-chart-tooltip', border_color = '#4C230A')
-                        ], style={'height': '100%'})
+                        ], className = 'h-100')
                     ),
-                    ], className = 'card mb-2 h-100'
+                    ], className = 'map-card mb-2 flex-fill d-flex flex-column'
                 ),
                 dbc.Card([
                     dbc.CardHeader(id='casualty-trend-header'),
@@ -393,15 +403,15 @@ app.layout = html.Div([
                                 clear_on_unhover=True
                             ),
                             dcc.Tooltip(id='casualty-trend-tooltip', border_color = '#4C230A')
-                    ], style={'height': '100%'})
+                    ], className = 'h-100')
                     )
-                    ], className = 'card mb-2 h-100'
+                    ], className = 'map-card mb-2 flex-fill d-flex flex-column'
                 )
             ], 
-            className=['col','d-flex','flex-column', 'vh-100'],  
+            className=['d-flex','flex-column', 'vh-75'],  
             xs=12, sm=12, md=12, lg=12, xl=5  # Match with other Cols of Row 2
         ),
-    ], className = ['row', 'vh-75']), # Match with Row 1 classes
+    ], style = {'margin-top': '1vh'}, className = ['row', 'vh-75']), # Match with Row 1 classes
     # Hidden: back-end component to store the filtered data for quick access, reduce loading time
     dcc.Store(id='store-data', storage_type='session'),
     dcc.Loading(
@@ -692,7 +702,7 @@ def mapA_damage_choropleth(data):
             y=-0.1,
             xanchor="center",
             x=0.5,
-            title=dict(text="Total Damage (USD)")
+            title=None
         )
     )
 
@@ -761,18 +771,16 @@ def mapB_disaster_count_choropleth(data):
     disaster_count_filtered = filtered_data.copy()
     
     # Get the minimum and maximum damage values
-    mean = filtered_data['total_disasters'].mean()
+    median = filtered_data['total_disasters'].median()
 
     # Define bins and labels based on the current range of values (0 to over 600)
-    
-    
-    if mean <= 20:
+    if median <= 20:
         bins = [0, 10, 20, 30, 40, float('inf')]
         labels = ['0 - 10', '10 - 20', '20 - 30', '30 - 40', '> 40']
 
-    if mean <= 50:
-        bins = [0, 25, 50, 75, 100, float('inf')]
-        labels = ['0 - 25', '25 - 50', '50 - 75', '75 - 100', '> 100']
+    elif median <= 50:
+        bins = [0, 15, 25, 50, 100, float('inf')]
+        labels = ['0 - 15', '15 - 25', '25 - 50', '50 - 100', '> 100']
         
     else:
         bins = [0, 50, 100, 200, 300, float('inf')]
@@ -849,7 +857,7 @@ def mapB_disaster_count_choropleth(data):
             x=0.5,
             traceorder="normal",
             itemsizing="constant",
-            title=dict(text="Number of Disasters")
+            title=None
         )
     )
 
@@ -936,14 +944,15 @@ def plot_bar_total_disaster(data):
         ),
         yaxis_title='Total Disasters',
         plot_bgcolor='white',
-        margin=dict(l=40, r=40, t=40, b=40),
+        margin=dict(l=40, r=40, t=0, b=10),
         legend=dict(
             orientation='h',
+            itemsizing='constant',
             yanchor="bottom",
             y=-0.3,
             xanchor="center",
             x=0.5,
-            title=dict(text="Disaster type")
+            title=None
         )
     )
     return fig
@@ -1031,7 +1040,7 @@ def plot_line_casualty_trend(data):
             showgrid=True, gridwidth=1, gridcolor='lightgrey'
         ),
         plot_bgcolor='white',
-        margin=dict(l=40, r=40, t=40, b=40),
+        margin=dict(l=40, r=40, t=10, b=40),
         showlegend=False,
     )
     
@@ -1040,12 +1049,12 @@ def plot_line_casualty_trend(data):
 
     fig.add_hline(
         y = mean_death, line_dash="dash",
-        annotation_text=f"Global mean:{format_value(mean_death)}", 
+        annotation_text=f"Period mean:{format_value(mean_death)}", 
         annotation_position="bottom right")
 
     return fig
 
-# Stacked bar chart tooltip
+# Line chart tooltip
 @app.callback(
     Output("casualty-trend-tooltip", "show"),
     Output("casualty-trend-tooltip", "bbox"),
