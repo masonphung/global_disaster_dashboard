@@ -54,4 +54,4 @@ EM-DAT granted free access for [non-commercial use](https://doc.emdat.be/docs/le
 
 ### Special thanks to
 - The International Disaster Database EM-DAT for the Public Table about global disaster. Find out about EM-DAT and the Public Table [here](https://doc.emdat.be/docs/data-structure-and-content/emdat-public-table/).
-- [Bootswatch](https://bootswatch.com) bootstrap templatheme by Thomas Park. We make a considerable amount of changes to customize the theme and make sure the final theme works well.
+- [Bootswatch](https://bootswatch.com) bootstrap template theme by Thomas Park. We make a considerable amount of changes to customize the theme and make sure the final theme works well.
