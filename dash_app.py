@@ -89,8 +89,7 @@ app.layout = html.Div([
         # Col 1 of Row 1: Dashboard title
         dbc.Col(
             [html.H1('Global Disaster Statistics'),
-             html.P(id='last-updated-card'),
-             html.P("Press Reset Filter if the plots don't load")],
+             html.P(id='last-updated-card')],
             className = ['align-items-center', 'flex-column', 'text-center', 'justify-content-center','align-content-center'],
             xs=12, sm=12, md=12, lg=2, xl=2 # Match with Col 2 of Row 1
         ),
@@ -151,8 +150,9 @@ app.layout = html.Div([
                         ),
                         dbc.Row([
                             html.Div([
-                                dbc.Button("Reset Filter", id="clear-filter", style = {'margin-right': '0.5vw'}),
+                                dbc.Button("Reset Filter", id="clear-filter"),
                                 dbc.Button("Dashboard Guide", id="open-modal"),
+                                html.Div("Press Reset Filter if the plots don't load", style = {"fontSize": "14px", "textAlign":"center"}),
                                 dbc.Modal(
                                     [
                                         dbc.ModalHeader(dbc.ModalTitle("How to use the dashboard")),
@@ -217,9 +217,9 @@ app.layout = html.Div([
                                 ),
                                 
                                 # dbc.Button("Download as JPG", id='download-image') # Under development
-                            ])
+                            ], className='d-flex align-items-center justify-content-between')
                         ])
-                    ], className = 'd-flex flex-column gap-1'),
+                    ], className = 'd-flex flex-column justify-content-between h-100'),
                 ], className = ['h-100'], 
                 xs=12, sm=12, md=12, lg=4, xl=4),
                 # Filter 2: Location (Continent, Subregion, Country in vertical stack)
@@ -361,7 +361,7 @@ app.layout = html.Div([
             className = ['col', 'dflex', 'h-100'], 
             xs=12, sm=12, md=12, lg=10, xl=10  # Match with Col 1 of Row 1
         )
-    ], className=['row', 'vh-25']),  # Match with Row 2 classes
+    ], className=['row']),  # Match with Row 2 classes
     
     # Row 2: Statistics cards and graphs                
     dbc.Row([
