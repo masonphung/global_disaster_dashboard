@@ -201,13 +201,6 @@
     scroll-behavior: smooth;
   }
 }
-/*Modified
-- Card (header, body)
-- H1, H3, P, span, label
-- button
-- slider
-- Red and orange
-*/
 
 /* Newly added */
 filter-icon {
@@ -303,7 +296,6 @@ h2, .h2 {
 
 /**/
 h3, .h3 {
-  font-size: calc(0.75vh + 0.75vw);
   max-width: 100%;
 }
 h3.auto-fit {
@@ -311,7 +303,6 @@ h3.auto-fit {
 }
 @media (min-width: 1200px) {
   h3, .h3 {
-    font-size: calc(0.75vh + 0.75vw);
     color: #C44802;
     max-width: 100%;
   }

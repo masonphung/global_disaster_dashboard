@@ -3,10 +3,15 @@
 - We suggest to run the dashboard in Google Chrome for the best experience.
 - Follow `project-description.ipynb` to run the dashboard locally.
 
+### Let's a look on your mobile device !
+
+<img src="assets/images/teamA-dashboard-QR.png" width="145">
+
 ### Introduction - A dash dashboard presents the global disasterous status
 Our project focuses on developing an interactive dashboard that analyzes global disaster data, sourced from the EM-DAT database, to visualize the impacts of climate-related disasters. By tracking key metrics such as total deaths, affected populations, and economic losses, the dashboard provides valuable insights into disaster trends. These insights support the United Nations' SDG Goal 13.1, which aims to strengthen resilience and adaptive capacity to climate-related hazards. Through this tool, policymakers and disaster management agencies can make informed decisions, helping to reduce the risks associated with climate change and enhance global preparedness for future disasters.
 
-![](assets/images/tsunami-icegif-9.gif)
+<img src="assets/images/tsunami-icegif-9.gif" width="990">
+
 
 ### Data: EM-DAT Public Table
 The data used for the dashboard is the EM-DAT Public Table of the International Disaster Database. Additional information could be found on EM-DAT [documentation website](https://doc.emdat.be/docs/data-structure-and-content/general-definitions-and-concepts/).
