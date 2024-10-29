@@ -3,7 +3,7 @@
 - We suggest to run the dashboard in Google Chrome for the best experience.
 - Follow `project-description.ipynb` to run the dashboard locally.
 
-### Let's a look on your mobile device !
+### Let's take a look on your mobile device !
 
 <img src="assets/images/teamA-dashboard-QR.png" width="145">
 
