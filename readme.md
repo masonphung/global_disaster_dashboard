@@ -1,4 +1,6 @@
-## DataViz Challenge 2024
+# Global Disaster Dashboard
+## DataViz Challenge 2024 - Team A
+
 - Link to The Online Dashboard: https://macquarie-dataviz24-sdg-dashboard.onrender.com
 - We suggest to run the dashboard in Google Chrome for the best experience.
 - Follow `project-description.ipynb` to run the dashboard locally.
