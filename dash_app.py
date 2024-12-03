@@ -1,14 +1,8 @@
 import dash
-from dash import dcc, html, no_update # clientside_callback
 from dash.dependencies import Input, Output, State
-import dash_mantine_components as dmc
 import dash_bootstrap_components as dbc
 import pandas as pd
-import numpy as np
 import plotly.express as px
-import plotly.graph_objects as go  
-import webbrowser
-from threading import Timer
 # Load pre-defined functions that help our work
 from utils import *
 

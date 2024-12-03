@@ -6,7 +6,6 @@ pandas
 dash
 gunicorn
 plotly
-dash_mantine_components
 dash_bootstrap_components
 datetime
 openpyxl
