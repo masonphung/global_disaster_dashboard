@@ -1,8 +1,8 @@
 # Global Disaster Dashboard
-## DataViz Challenge 2024 - Team A
+## Macquarie DataViz 2024 Challenge Winner for the Best Interactive Visualization award.
 
-- Link to The Online Dashboard: https://macquarie-dataviz24-sdg-dashboard.onrender.com
-- We suggest to run the dashboard in Google Chrome for the best experience.
+- [Link](https://sdgdashboard.masonphung.com) to The Online Dashboard: 
+- We suggest to run the dashboard in Google Chrome/firefox for the best experience.
 - Follow `project-description.ipynb` to run the dashboard locally.
 
 ### Let's take a look on your mobile device !
@@ -32,12 +32,6 @@ EM-DAT granted free access for [non-commercial use](https://doc.emdat.be/docs/le
 - **Data-Driven Decisions**:  Eye-catching visuals and interactive plots, combined with a wide range of filters, allow users to explore disaster impacts, identify high-risk areas, and assess trends, supporting effective disaster preparedness and risk reduction.
 - **An SDG 13 approach**: By providing real-time insights into climate-related disasters, enabling decision-makers to strengthen resilience, improve disaster preparedness, and reduce the risks associated with climate change impacts.
 - **Climate-Related Focus**: By highlighting climate-related disasters, the dashboard underscores the growing impact of climate change on global vulnerabilities, reinforcing the urgency for adaptation and mitigation efforts.
-
-### Members
-- Do Nam Phong, Phung (Team contact)
-- Cao Thuc, Ta
-- Anh Duc, Nguyen
-- Viet Anh, Nguyen
 
 ### Last update
 - Full update logs: [Update log](/update_log.txt)
