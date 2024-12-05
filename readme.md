@@ -1,5 +1,5 @@
 # Global Disaster Dashboard
-## Macquarie DataViz 2024 Challenge Winner for the Best Interactive Visualization award.
+## Winner at Macquarie University DataViz 2024 Challenge
 
 - [Link](https://sdgdashboard.masonphung.com) to The Online Dashboard: 
 - We suggest to run the dashboard in Google Chrome/firefox for the best experience.
