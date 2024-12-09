@@ -25,7 +25,7 @@ EM-DAT granted free access for [non-commercial use](https://doc.emdat.be/docs/le
 
 ### Key Features
 
-![](assets/images/dashboard_cap.jpg)
+![](assets/images/dashboard_cap.png)
 
 - **Python programmed**: The dashboard built with Python allow easy future development, cross-platform accessibility, and efficient data processing and updates.  
 - **User-Friendly Interface**: Offers an interactive, easy-to-use platform for policymakers, researchers, and disaster management teams.
